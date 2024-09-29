@@ -20,7 +20,7 @@ const App = () => {
     if (token) {
       return (
         <Routes>
-          <Route path="*" element={<Navigate to="/workspace" />} />
+          <Route path="*" element={<Navigate to="/" />} />
           {PrivateRoutes.map(({ path, element, key }) => (
             <Route key={key} exact path={path} element={<AuthorizeWrapper />}>
               <Route key={key + 1} exact path={path} element={element} />

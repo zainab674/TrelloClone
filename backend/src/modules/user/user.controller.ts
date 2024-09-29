@@ -35,7 +35,7 @@ export class UserController {
 
   }
 
-  ///////////////////GET ALL POSTS
+  ///////////////////GET ALL Users
   @Get(constTexts.userRoute.allUsers)
   @ApiPageOkResponse({
     description: "Get all List",
@@ -60,7 +60,7 @@ export class UserController {
     @UploadedFile() avatar: Express.Multer.File,
     @Body() userUpdateDto: UpdateUserDto): Promise<any> {
     if (avatar) {
-      userUpdateDto.photoUrl = avatar.destination + avatar.filename;
+      userUpdateDto.photoURL = avatar.destination + avatar.filename;
     }
     return this.userService.update(user.id, userUpdateDto);
   }

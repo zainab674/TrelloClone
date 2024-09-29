@@ -31,7 +31,7 @@ let UserController = class UserController {
     }
     async update(user, avatar, userUpdateDto) {
         if (avatar) {
-            userUpdateDto.photoUrl = avatar.destination + avatar.filename;
+            userUpdateDto.photoURL = avatar.destination + avatar.filename;
         }
         return this.userService.update(user.id, userUpdateDto);
     }

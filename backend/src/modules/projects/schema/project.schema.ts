@@ -30,36 +30,40 @@ export class ProjectEntity {
     @Prop({ type: String, required: true })
     title: string;
 
+    @IsOptional()
     @IsString()
     @IsOptional()
     @ApiProperty({ description: "Description of the Project" })
     @Prop({ type: String })
     description: string;
 
+    @IsOptional()
     @IsDate()
     @IsOptional()
     @ApiProperty({ description: "Due date of the Project" })
     @Prop({ type: Date })
     dueDate: Date;
 
-
+    @IsOptional()
     @IsBoolean()
     @ApiProperty({ description: "Completion status of the Project", default: false })
     @Prop({ type: Boolean, default: false })
     isCompleted: boolean;
 
 
-
+    @IsOptional()
     @ApiProperty({ type: String, description: "user reference ID" })
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     userId: mongoose.Types.ObjectId;
 
+    @IsOptional()
     @IsArray()
     @IsOptional()
     @ApiProperty({ description: "Users with whom the Project is shared", type: [String] })
     @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] })
     members: mongoose.Types.ObjectId[];
 
+    @IsOptional()
     @IsArray()
     @IsOptional()
     @ApiProperty({ description: "tasks of projects", type: [String] })

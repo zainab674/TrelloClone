@@ -1,5 +1,5 @@
 // import { HomePage, ProfilePage } from "../../pages"; 
-import { Landing, Auth, WorkSpace } from '../../pages';
+import { Landing, Auth, WorkSpace, BoardPage } from '../../pages';
 
 const authenticatedRoutes = [
 
@@ -12,6 +12,11 @@ const authenticatedRoutes = [
         key: 1,
         path: '/',
         element: Landing,
+    },
+    {
+        key: 2,
+        path: '/boardpage/:id',
+        element: BoardPage,
     },
 ];
 

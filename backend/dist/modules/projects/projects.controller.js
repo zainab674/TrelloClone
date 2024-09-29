@@ -28,6 +28,7 @@ let ProjectsController = class ProjectsController {
         this.projectsService = projectsService;
     }
     async create(user, createDto) {
+        createDto.userId = user.id;
         console.log(createDto);
         return this.projectsService.create(createDto);
     }

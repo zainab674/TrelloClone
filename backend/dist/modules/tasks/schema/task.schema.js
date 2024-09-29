@@ -23,7 +23,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: "Title of the task" }),
     (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
-], TaskEntity.prototype, "title", void 0);
+], TaskEntity.prototype, "taskName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -32,11 +32,10 @@ __decorate([
     __metadata("design:type", String)
 ], TaskEntity.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)({ description: "Due date of the task" }),
-    (0, mongoose_1.Prop)({ type: Date }),
-    __metadata("design:type", Date)
+    (0, mongoose_1.Prop)({ type: String }),
+    __metadata("design:type", String)
 ], TaskEntity.prototype, "dueDate", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
@@ -47,24 +46,23 @@ __decorate([
     __metadata("design:type", Number)
 ], TaskEntity.prototype, "priority", void 0);
 __decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ description: "Labels for the task", type: [String] }),
-    (0, mongoose_1.Prop)({ type: [String], default: [] }),
-    __metadata("design:type", Array)
-], TaskEntity.prototype, "labels", void 0);
-__decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, swagger_1.ApiProperty)({ description: "Completion status of the task", default: false }),
     (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], TaskEntity.prototype, "isCompleted", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, swagger_1.ApiProperty)({ description: "current status of the task", default: false }),
+    (0, mongoose_1.Prop)({ type: String }),
+    __metadata("design:type", String)
+], TaskEntity.prototype, "status", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ type: String, description: "Project reference ID" }),
     (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'ProjectEntity' }),
     __metadata("design:type", mongoose_2.default.Types.ObjectId)
-], TaskEntity.prototype, "project", void 0);
+], TaskEntity.prototype, "projectId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String, description: "user reference ID" }),
     (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }),
@@ -76,7 +74,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: "Users with whom the task is shared", type: [String] }),
     (0, mongoose_1.Prop)({ type: [mongoose_2.default.Schema.Types.ObjectId], ref: 'User', default: [] }),
     __metadata("design:type", Array)
-], TaskEntity.prototype, "sharedWith", void 0);
+], TaskEntity.prototype, "assignedTo", void 0);
 exports.TaskEntity = TaskEntity = __decorate([
     (0, mongoose_1.Schema)({
         toJSON: {

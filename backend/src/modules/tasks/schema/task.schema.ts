@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
     IsArray,
     IsBoolean,
-    IsDate,
+
     IsNumber,
     IsOptional,
     IsString,
@@ -30,7 +30,7 @@ export class TaskEntity {
     @IsString()
     @ApiProperty({ description: "Title of the task" })
     @Prop({ type: String, required: true })
-    title: string;
+    taskName: string;
 
     @IsString()
     @IsOptional()
@@ -38,11 +38,11 @@ export class TaskEntity {
     @Prop({ type: String })
     description: string;
 
-    @IsDate()
-    @IsOptional()
+
+    @IsString()
     @ApiProperty({ description: "Due date of the task" })
-    @Prop({ type: Date })
-    dueDate: Date;
+    @Prop({ type: String })
+    dueDate: string;
 
     @IsNumber()
     @Min(1)
@@ -51,23 +51,23 @@ export class TaskEntity {
     @Prop({ type: Number, default: 3 })
     priority: number;
 
-    @IsArray()
-    @IsString({ each: true })
-    @IsOptional()
-    @ApiProperty({ description: "Labels for the task", type: [String] })
-    @Prop({ type: [String], default: [] })
-    labels: string[];
 
+    @IsOptional()
     @IsBoolean()
     @ApiProperty({ description: "Completion status of the task", default: false })
     @Prop({ type: Boolean, default: false })
     isCompleted: boolean;
 
+    @IsOptional()
+    @ApiProperty({ description: "current status of the task", default: false })
+    @Prop({ type: String })
+    status: string;
+
 
 
     @ApiProperty({ type: String, description: "Project reference ID" })
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectEntity' })
-    project: mongoose.Types.ObjectId;
+    projectId: mongoose.Types.ObjectId;
 
     @ApiProperty({ type: String, description: "user reference ID" })
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
@@ -77,7 +77,7 @@ export class TaskEntity {
     @IsOptional()
     @ApiProperty({ description: "Users with whom the task is shared", type: [String] })
     @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] })
-    sharedWith: mongoose.Types.ObjectId[];
+    assignedTo: mongoose.Types.ObjectId[];
 
 
 }

@@ -2,15 +2,15 @@ import { PickType } from "@nestjs/swagger";
 import { TaskEntity } from "../schema/task.schema";
 
 export class CreateTaskDto extends PickType(TaskEntity, [
-    "title",
+    "taskName",
     "description",
     "dueDate",
     "priority",
-    "labels",
+    "status",
     "isCompleted",
-    "project",
+    "projectId",
 
-    "sharedWith",
+    "assignedTo",
 
 
 

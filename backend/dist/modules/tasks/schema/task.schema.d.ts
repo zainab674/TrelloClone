@@ -26,15 +26,15 @@ import mongoose, { Document } from "mongoose";
 export type TaskDocument = TaskEntity & Document;
 export declare class TaskEntity {
     id: string;
-    title: string;
+    taskName: string;
     description: string;
-    dueDate: Date;
+    dueDate: string;
     priority: number;
-    labels: string[];
     isCompleted: boolean;
-    project: mongoose.Types.ObjectId;
+    status: string;
+    projectId: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
-    sharedWith: mongoose.Types.ObjectId[];
+    assignedTo: mongoose.Types.ObjectId[];
 }
 declare const TaskSchema: mongoose.Schema<TaskEntity, mongoose.Model<TaskEntity, any, any, any, mongoose.Document<unknown, any, TaskEntity> & TaskEntity & {
     _id: mongoose.Types.ObjectId;

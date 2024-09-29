@@ -21,23 +21,12 @@ const Nav = () => {
     const navigate = useNavigate();
     const { token } = useAuth();
     const { setToken } = useAuth();
+    const { me } = useAuth();
 
     const [Login, setLogin] = useState(true);
-    const [user, setUser] = useState();
-
-    const fetchUserProfile = async () => {
-
-        const userProfile = await Profile(token);
-        setUser(userProfile);
-
-    };
-    useEffect(() => {
 
 
-        fetchUserProfile();
-    }, []);
-
-    console.log("uuuuuu", user)
+    console.log("uuuuuu", me)
 
 
     const authh = () => {
@@ -67,12 +56,12 @@ const Nav = () => {
                 </button>
             </div>
             <div className="flex gap-4">
-                {user &&
+                {me &&
                     <>
-                        <div className="md:text-lg text-xs font-bold text-gray-800">{user.profile.displayName}</div>
+                        <div className="md:text-lg text-xs font-bold text-gray-800">{me.profile.displayName}</div>
                         <img
                             className="w-8 h-8 rounded-full text-gray-800"
-                            src={user.profile.photoURL ? user.profile.photoURL : "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
+                            src={me.profile.photoURL ? me.profile.photoURL : "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
                             alt="User Profile"
                         />
                     </>}

@@ -4,14 +4,14 @@ exports.CreateTaskDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const task_schema_1 = require("../schema/task.schema");
 class CreateTaskDto extends (0, swagger_1.PickType)(task_schema_1.TaskEntity, [
-    "title",
+    "taskName",
     "description",
     "dueDate",
     "priority",
-    "labels",
+    "status",
     "isCompleted",
-    "project",
-    "sharedWith",
+    "projectId",
+    "assignedTo",
 ]) {
 }
 exports.CreateTaskDto = CreateTaskDto;

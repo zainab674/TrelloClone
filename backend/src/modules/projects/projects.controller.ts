@@ -32,7 +32,7 @@ export class ProjectsController {
   ) {
 
 
-
+    createDto.userId = user.id
     console.log(createDto)
     return this.projectsService.create(createDto);
   }

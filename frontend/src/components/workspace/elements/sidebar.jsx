@@ -87,8 +87,8 @@ const Sidebar = () => {
             <div>
                 {boards && (
 
-                    // <Boards />
-                    <h1>hi</h1>
+                    <Boards />
+                    // <h1>hi</h1>
                 )
 
                 }
