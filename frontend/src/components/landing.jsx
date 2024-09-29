@@ -1,12 +1,51 @@
+import { useNavigate } from "react-router-dom";
+import { apiConst } from "../constants/api.constants";
+import { useEffect, useState } from "react";
 
-function Landing() {
+import { useAuth } from "../Authcontext";
+import { LogOut } from "../api/authfunction";
+
+
+
+export function Landing() {
+    const navigate = useNavigate();
+    const [creatorId, setCreatorId] = useState("");
+    const [Login, setLogin] = useState(true);
+    const { token } = useAuth();
+    const { setToken } = useAuth();
+
+
+    const authh = () => {
+        navigate(apiConst.Auth)
+
+    }
+    const workspace = () => {
+        console.log("hhh")
+        navigate(apiConst.Workspace)
+
+    }
+
+    const logout = () => {
+
+        LogOut(setToken, navigate);
+    }
+
+
+
+
     return (
         <div className="bg-gray-100 min-h-screen flex flex-col items-center">
             {/* Navbar */}
             <header className="w-full py-4 flex justify-between items-center px-6 bg-white shadow-md">
                 <div className="md:text-2xl text-lg font-bold text-gray-800">Taskify</div>
                 <div className="flex gap-4">
-                    <button className="text-gray-800">Login</button>
+                    {token ?
+                        <button className="text-gray-800" onClick={logout}>Log Out</button>
+                        :
+                        <button className="text-gray-800" onClick={authh}>Log in</button>
+                    }
+
+
                     <button className="bg-black text-white px-4 py-2 rounded-md">
                         Get Taskify for free
                     </button>
@@ -29,9 +68,17 @@ function Landing() {
                     the way your team works is unique – accomplish it all with Taskify.
                 </p>
 
-                <button className="bg-black text-white px-6 py-3 rounded-md font-semibold">
-                    Get Taskify for free
+
+                {token ? <button className="bg-black text-white px-6 py-3 rounded-md font-semibold" onClick={workspace}>
+                    Start Your project
                 </button>
+                    :
+
+                    <button className="bg-black text-white px-6 py-3 rounded-md font-semibold" >
+                        Get Taskify for free
+                    </button>
+                }
+
             </main>
         </div>
     );
