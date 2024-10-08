@@ -5,18 +5,18 @@ const ProjectHeader = ({ project, users }) => {
 
     return (
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            {/* Header image */}
+
             <div
                 className="h-40 bg-cover bg-center"
                 style={{
                     backgroundImage: 'url("https://grants.gettyimages.com/images/grants/GettyImages-1229275252.png")',
                 }}
             >
-                {/* Image content here */}
+
             </div>
 
 
-            {/* Title and Members */}
+
             <div className="p-4 flex justify-between items-center">
 
                 <div className="flex items-center">
