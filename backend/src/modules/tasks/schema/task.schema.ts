@@ -2,13 +2,12 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import {
     IsArray,
-    IsBoolean,
+
 
     IsNumber,
     IsOptional,
     IsString,
-    Max,
-    Min,
+
 } from "class-validator";
 import {
     validationMetadatasToSchemas,
@@ -45,21 +44,15 @@ export class TaskEntity {
     dueDate: string;
 
     @IsNumber()
-    @Min(1)
-    @Max(3)
-    @ApiProperty({ description: "Priority of the task", minimum: 1, maximum: 3, default: 3 })
-    @Prop({ type: Number, default: 3 })
+    @ApiProperty({ description: "Priority of the task", })
+    @Prop({ type: Number, })
     priority: number;
 
 
-    @IsOptional()
-    @IsBoolean()
-    @ApiProperty({ description: "Completion status of the task", default: false })
-    @Prop({ type: Boolean, default: false })
-    isCompleted: boolean;
+
 
     @IsOptional()
-    @ApiProperty({ description: "current status of the task", default: false })
+    @ApiProperty({ description: "current status of the task", })
     @Prop({ type: String })
     status: string;
 
@@ -69,9 +62,15 @@ export class TaskEntity {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectEntity' })
     projectId: mongoose.Types.ObjectId;
 
+
     @ApiProperty({ type: String, description: "user reference ID" })
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     userId: mongoose.Types.ObjectId;
+
+
+    @ApiProperty({ type: String, description: "assigned by ID" })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    assignedBy: mongoose.Types.ObjectId;
 
     @IsArray()
     @IsOptional()

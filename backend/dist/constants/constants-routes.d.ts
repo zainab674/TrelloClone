@@ -26,6 +26,7 @@ export declare const constTexts: {
         my: string;
         users: string;
         specific: string;
+        BYprojectID: string;
         reply: string;
         completedByOther: string;
         update: string;
@@ -50,6 +51,7 @@ export declare const constTexts: {
         deleteImage: string;
         search: string;
         withinRadius: string;
+        projectMembers: string;
     };
     assignedRoute: {
         name: string;

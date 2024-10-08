@@ -23,17 +23,27 @@ const task_schema_1 = require("./schema/task.schema");
 const constants_1 = require("../../constants");
 const swagger_1 = require("@nestjs/swagger");
 const update_task_dto_1 = require("./dto/update-task.dto");
+const mongoose_1 = require("mongoose");
+const projects_service_1 = require("../projects/projects.service");
 let TasksController = class TasksController {
-    constructor(tasksService) {
+    constructor(tasksService, projectService) {
         this.tasksService = tasksService;
+        this.projectService = projectService;
     }
     async create(user, createDto) {
         createDto.userId = user.id;
-        console.log(createDto);
-        return this.tasksService.create(createDto);
+        createDto.assignedBy = new mongoose_1.Types.ObjectId(user.id);
+        const task = await this.tasksService.create(createDto);
+        if (task.projectId) {
+            await this.projectService.AddTaskInProject(task.projectId.toString(), task.id.toString());
+        }
+        else {
+            throw new Error("Task must be associated with a project.");
+        }
+        return task;
     }
-    async update(id, updateDatato) {
-        console.log(updateDatato);
+    async update(user, id, updateDatato) {
+        updateDatato.assignedBy = new mongoose_1.Types.ObjectId(user.id);
         return this.tasksService.update(id, updateDatato);
     }
     findall(page = 1, limit = 20) {
@@ -44,11 +54,20 @@ let TasksController = class TasksController {
         return this.tasksService.findMy(id);
     }
     async findUP(id) {
-        console.log(id);
         return this.tasksService.findMy(id);
     }
-    async deletePost(id) {
-        return this.tasksService.deletePost(id);
+    async findTasks(id) {
+        return this.tasksService.findByProjectId(id);
+    }
+    async deletePost(taskId) {
+        const task = await this.tasksService.findById(taskId);
+        if (!task) {
+            throw new Error('Task not found');
+        }
+        const projectId = task.projectId;
+        await this.projectService.RemoveTaskFromProject(projectId.toString(), taskId);
+        const deletedTask = await this.tasksService.deletePost(taskId);
+        return deletedTask;
     }
 };
 exports.TasksController = TasksController;
@@ -73,10 +92,11 @@ __decorate([
         description: "Update Task",
         type: task_schema_1.TaskEntity,
     }),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Body)()),
+    __param(0, (0, decorators_1.AuthUser)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_task_dto_1.UpdateTaskDto]),
+    __metadata("design:paramtypes", [user_schema_1.User, String, update_task_dto_1.UpdateTaskDto]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "update", null);
 __decorate([
@@ -117,9 +137,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "findUP", null);
 __decorate([
+    (0, common_1.Get)(constants_1.constTexts.taskRoute.BYprojectID),
+    (0, decorators_1.ApiPageOkResponse)({
+        description: "Get Users List",
+        type: task_schema_1.TaskEntity,
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TasksController.prototype, "findTasks", null);
+__decorate([
     (0, common_1.Delete)(constants_1.constTexts.taskRoute.delete),
     (0, decorators_1.ApiPageOkResponse)({
-        description: "Delete Post",
+        description: "Delete Task",
         type: task_schema_1.TaskEntity,
     }),
     (0, decorators_1.Auth)(userRoles_1.Action.Update, "Post"),
@@ -131,6 +162,7 @@ __decorate([
 exports.TasksController = TasksController = __decorate([
     (0, common_1.Controller)('tasks'),
     (0, swagger_1.ApiTags)('tasks'),
-    __metadata("design:paramtypes", [tasks_service_1.TasksService])
+    __metadata("design:paramtypes", [tasks_service_1.TasksService,
+        projects_service_1.ProjectsService])
 ], TasksController);
 //# sourceMappingURL=tasks.controller.js.map

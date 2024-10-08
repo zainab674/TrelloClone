@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -16,13 +16,92 @@ export class ProjectsService {
 
   ) { }
 
-  ///////////////////CREATE Tasks
+  ///////////////////CREATE Projects
   async create(createProjectDto: CreateProjectDto) {
     const create: ProjectDocument = new this.schemaModel(createProjectDto);
     return await create.save().catch((err) => {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     });
   }
+
+  ///////////////////Add Task in Projects
+  async AddTaskInProject(projectid: string, taskId: string) {
+    const project = await this.schemaModel.findById(projectid).exec();
+    if (project) {
+
+      const updatedProject = await this.schemaModel.findByIdAndUpdate(
+        projectid,
+        { $push: { tasks: taskId } },
+        { new: true }
+      ).exec();
+
+      return updatedProject;
+    } else {
+      throw new Error('Project not found');
+    }
+  }
+  ///////////////////Add Memebers in Projects
+  async AddMembersInProject(projectid: string, membersId: []) {
+    const project = await this.schemaModel.findById(projectid).exec();
+    if (project) {
+
+      const updatedProject = await this.schemaModel.findByIdAndUpdate(
+        projectid,
+        { $push: { members: membersId } },
+        { new: true }
+      ).exec();
+
+      return updatedProject;
+    } else {
+      throw new Error('Project not found');
+    }
+  }
+
+  // Remove Task from Project
+  async RemoveTaskFromProject(projectId: string, taskId: string) {
+
+    const project = await this.schemaModel.findById(projectId).exec();
+
+    if (project) {
+
+      const updatedProject = await this.schemaModel.findByIdAndUpdate(
+        projectId,
+        { $pull: { tasks: taskId } },
+        { new: true }
+      ).exec();
+
+      return updatedProject;
+    } else {
+      throw new Error('Project not found');
+    }
+  }
+
+
+
+
+
+
+
+
+  async findByProjectId(id: string): Promise<any> {
+    const project = await this.schemaModel.findById(id)
+      .populate({
+        path: 'members',
+        select: 'id displayName',  // Ensure you are selecting the `id` field
+      })
+      .exec();
+
+    // Check if the project exists
+    if (!project) {
+      throw new NotFoundException(`Project with ID ${id} not found.`);
+    }
+
+    return project.members; // Return only the members array
+  }
+
+
+
+
 
   ///////////////////////ALL Projects
   async findall(page = 1, limit = 20) {
@@ -53,9 +132,9 @@ export class ProjectsService {
   }
 
   /////////////////////FIND BY ProjectID
-  async findById(postId: string): Promise<ProjectDocument> {
+  async findById(id: string): Promise<ProjectDocument> {
     return this.schemaModel
-      .findById(postId).exec();
+      .findById(id).exec();
   }
 
   ////////////////////UPDATE POSTS
@@ -82,7 +161,7 @@ export class ProjectsService {
   async findMy(id: string) {
     try {
       const data = await this.schemaModel.find({ userId: id }).exec();
-      console.log(data)
+      // console.log(data)
       return {
         data,
       };
@@ -108,4 +187,23 @@ export class ProjectsService {
 
     return post;
   }
+  //////////////////////////POSTS BY USERID
+  async findByMemberId(id: string): Promise<any> {
+    const projects = await this.schemaModel
+      .find({
+        members: id  // Directly check if the id exists in the members array
+      })
+      .populate({
+        path: 'members',
+        select: 'id displayName photoURL  ',  // Ensure you are selecting the `id` field
+      })
+      // .exec();
+      .select('title isCompleted members  ')  // Select fields to include
+      .exec();
+
+    return projects;
+  }
+
+
+
 }

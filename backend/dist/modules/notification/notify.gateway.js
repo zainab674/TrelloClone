@@ -14,10 +14,10 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 let NotifyGateway = class NotifyGateway {
     async handleConnection(socket) {
-        console.log("1socketId connected" + socket.id);
+        // console.log("1socketId connected" + socket.id);
     }
     async handleDisconnect(socket) {
-        console.log("disconnect " + socket.id);
+        // console.log("disconnect " + socket.id);
     }
     sendNotificationCount(count) {
         this.server.emit("notificationCount", count);

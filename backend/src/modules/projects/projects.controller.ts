@@ -11,18 +11,16 @@ import { User } from '../user/user.schema';
 
 
 
-
-
 @Controller('Projects')
 @ApiTags('Projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) { }
 
-  ////////////////////////////CREATE Task
-  @Auth(Action.Create, "Task")
+  ////////////////////////////CREATE Project
+  @Auth(Action.Create, "Project")
   @Post()
   @ApiPageOkResponse({
-    description: "Create Task",
+    description: "Create Project",
     type: ProjectEntity,
   })
   async create(
@@ -33,30 +31,55 @@ export class ProjectsController {
 
 
     createDto.userId = user.id
-    console.log(createDto)
+    // console.log(createDto)
     return this.projectsService.create(createDto);
   }
 
   ///////////////////////////////////Update
-  @Auth(Action.Update, "Task")
+  @Auth(Action.Update, "Project")
   @Put(constTexts.projectRoute.update)
 
   @ApiPageOkResponse({
-    description: "Update Task",
+    description: "Update Project",
     type: ProjectEntity,
   })
 
   async update(
-
     @Param("id") id: string,
-    @Body() updateDatato: UpdateProjectDto) {
-
-    console.log(updateDatato)
+    @Body() updateDatato: UpdateProjectDto
+  ) {
+    console.log("uuuu", updateDatato)
 
     return this.projectsService.update(id, updateDatato);
   }
 
-  ///////////////////GET ALL Tasks
+
+
+
+  ///////////////////get Project Members
+  @Auth(Action.Read, "Project")
+  @Get(constTexts.projectRoute.projectMembers)
+  @ApiPageOkResponse({
+    description: "Get Project Members",
+    type: ProjectEntity,
+  })
+  async getProjectMembers(@Param('id') id: string, @AuthUser() user: User) {
+    return this.projectsService.findByProjectId(id);
+  }
+
+  ///////////////////GET Project Details
+  @Auth(Action.Read, "Project")
+  @Get(constTexts.projectRoute.details)
+  @ApiPageOkResponse({
+    description: "Get Project ",
+    type: ProjectEntity,
+  })
+  async getProject(@Param('id') id: string, @AuthUser() user: User) {
+    return this.projectsService.findById(id);
+  }
+
+
+  ///////////////////GET ALL Projects
   @Get(constTexts.projectRoute.getAllPosts)
   @ApiPageOkResponse({
     description: "Get all List",
@@ -68,7 +91,7 @@ export class ProjectsController {
     return this.projectsService.findall(page, limit);
   }
 
-  ///////////////////GET My Tasks
+  ///////////////////GET My Projects
   @Auth(Action.Read, "Post")
   @Get(constTexts.projectRoute.my)
   @ApiPageOkResponse({
@@ -90,7 +113,7 @@ export class ProjectsController {
   })
 
   async findUP(@Param("id") id: string) {
-    console.log(id)
+    // console.log(id)
     return this.projectsService.findMy(id);
   }
 

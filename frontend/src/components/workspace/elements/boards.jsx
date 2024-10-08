@@ -2,17 +2,29 @@ import React, { useEffect, useState } from 'react';
 import ProjectModal from './projectmodal';
 import Board from './BoardCard';
 import { useAuth } from '../../../Authcontext';
-import { CreateProject, UserProjects } from '../../../api/allApis';
+import { AllUsers, CreateProject, UserProjects } from '../../../api/allApis';
 
 const Boards = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { token } = useAuth();
     const [myProj, setMyProj] = useState([]); // Initialize as an empty array
+    const [users, setUsers] = useState('')
+
+
+
+    const FetchAllUsers = async () => {
+        try {
+            const res = await AllUsers();
+            setUsers(res.data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
 
     const FetchProjects = async () => {
         try {
             const res = await UserProjects(token);
-            console.log("Fetched Projects:", res);
+
 
 
             setMyProj(res.data);
@@ -22,9 +34,10 @@ const Boards = () => {
         }
     };
 
-    const handleProjectSubmit = async (projectTitle) => {
+    const handleProjectSubmit = async (projectTitle, assignedToID) => {
         const data = {
             title: projectTitle,
+            members: assignedToID
         };
         try {
             const result = await CreateProject(data, token);
@@ -37,6 +50,7 @@ const Boards = () => {
 
     useEffect(() => {
         FetchProjects(); // Fetch projects on component mount
+        FetchAllUsers()
     }, []);
 
     return (
@@ -87,6 +101,7 @@ const Boards = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSubmit={handleProjectSubmit}
+                users={users}
             />
         </div>
     );

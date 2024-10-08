@@ -30,11 +30,13 @@ import { UserLoginDto } from "./dto/user.login.dto";
 import { TokenPayloadDto } from "./dto/TokenPayloadDto";
 import { UserSignupDto } from "./dto/user.signup.dto";
 import { TasksService } from "../tasks/tasks.service";
+import { ProjectsService } from "../projects/projects.service";
 export declare class AuthController {
     private userService;
     private authService;
     private tasksService;
-    constructor(userService: UserService, authService: AuthService, tasksService: TasksService);
+    private projectService;
+    constructor(userService: UserService, authService: AuthService, tasksService: TasksService, projectService: ProjectsService);
     generateString(length: any): Promise<string>;
     userLogin(userLoginDto: UserLoginDto): Promise<TokenPayloadDto>;
     userRegister(userRegisterDto: UserSignupDto): Promise<UserSignupDto>;
@@ -43,5 +45,7 @@ export declare class AuthController {
             _id: import("mongoose").Types.ObjectId;
         };
         tasks: any;
+        projects: any;
+        sharedProjects: any;
     }>;
 }

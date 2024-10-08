@@ -37,7 +37,7 @@ let AssignedTasksService = class AssignedTasksService {
         }
         createAssignedTaskDto.isCompleted = task.isCompleted;
         const already = await this.schemaModel.findOne({ taskId: createAssignedTaskDto.taskId }).exec();
-        console.log(already);
+        // console.log(already);
         if (already) {
             throw new common_1.HttpException("Task already assigned", exceptions_1.ResponseCode.BAD_REQUEST);
         }
@@ -203,6 +203,6 @@ exports.AssignedTasksService = AssignedTasksService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(assigned_schema_1.AssignedTaskEntity.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        posts_service_1.PostsService])
+    posts_service_1.PostsService])
 ], AssignedTasksService);
 //# sourceMappingURL=assigned-tasks.service.js.map

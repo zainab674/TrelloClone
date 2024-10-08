@@ -12,7 +12,7 @@ import {
   JSONSchema,
   validationMetadatasToSchemas,
 } from "class-validator-jsonschema";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 import { generateHash } from "../../common/utils";
 
 export type UserDocument = User & Document;
@@ -26,33 +26,11 @@ export type UserDocument = User & Document;
 export class User {
   id: string;
 
-  // Tasks 
-  @ApiProperty({
-    type: [String], // Array of strings for ObjectId representation
-    description: 'Array of Task IDs',
-  })
-  @Prop({ type: [Types.ObjectId], ref: 'Tasks' })
-  tasks: Types.ObjectId[];
 
 
 
-  // Project ID
-  @ApiProperty({
-    type: [String], // Array of strings for ObjectId representation
-    description: 'Array of Projects IDs',
-  })
-  @Prop({ type: [Types.ObjectId], ref: 'Projects' })
-  projectsCreated: Types.ObjectId[];
 
 
-
-  // Shared Projects ID
-  @ApiProperty({
-    type: [String], // Array of strings for ObjectId representation
-    description: 'Array of  Shared Projects IDs',
-  })
-  @Prop({ type: [Types.ObjectId], ref: 'Projects' })
-  sharedProjects: Types.ObjectId[];
 
 
 

@@ -39,22 +39,13 @@ __decorate([
 ], TaskEntity.prototype, "dueDate", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.Min)(1),
-    (0, class_validator_1.Max)(3),
-    (0, swagger_1.ApiProperty)({ description: "Priority of the task", minimum: 1, maximum: 3, default: 3 }),
-    (0, mongoose_1.Prop)({ type: Number, default: 3 }),
+    (0, swagger_1.ApiProperty)({ description: "Priority of the task", }),
+    (0, mongoose_1.Prop)({ type: Number, }),
     __metadata("design:type", Number)
 ], TaskEntity.prototype, "priority", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsBoolean)(),
-    (0, swagger_1.ApiProperty)({ description: "Completion status of the task", default: false }),
-    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
-    __metadata("design:type", Boolean)
-], TaskEntity.prototype, "isCompleted", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ description: "current status of the task", default: false }),
+    (0, swagger_1.ApiProperty)({ description: "current status of the task", }),
     (0, mongoose_1.Prop)({ type: String }),
     __metadata("design:type", String)
 ], TaskEntity.prototype, "status", void 0);
@@ -68,6 +59,11 @@ __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }),
     __metadata("design:type", mongoose_2.default.Types.ObjectId)
 ], TaskEntity.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, description: "assigned by ID" }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }),
+    __metadata("design:type", mongoose_2.default.Types.ObjectId)
+], TaskEntity.prototype, "assignedBy", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsOptional)(),

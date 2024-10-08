@@ -55,10 +55,13 @@ __decorate([
 ], ProjectEntity.prototype, "userId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)({ description: "Users with whom the Project is shared", type: [String] }),
-    (0, mongoose_1.Prop)({ type: [mongoose_2.default.Schema.Types.ObjectId], ref: 'User', default: [] }),
+    (0, swagger_1.ApiProperty)({
+        description: "Members assigned to tasks",
+        example: ["609c5a6a29a47b0015fb32bd", "609c5a6a29a47b0015fb32be"],
+    }),
+    (0, mongoose_1.Prop)({
+        type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }]
+    }),
     __metadata("design:type", Array)
 ], ProjectEntity.prototype, "members", void 0);
 __decorate([

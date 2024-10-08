@@ -22,6 +22,7 @@ import { TokenPayloadDto } from "./dto/TokenPayloadDto";
 
 import { UserSignupDto } from "./dto/user.signup.dto";
 import { TasksService } from "../tasks/tasks.service";
+import { ProjectsService } from "../projects/projects.service";
 // import { PostsService } from "../posts/posts.service";
 // import { AssignedTasksService } from "../assigned-tasks/assigned-tasks.service";
 
@@ -33,7 +34,7 @@ export class AuthController {
     private userService: UserService,
     private authService: AuthService,
     private tasksService: TasksService,
-    // private assignedServive: AssignedTasksService,
+    private projectService: ProjectsService,
   ) { }
 
   async generateString(length) {
@@ -62,7 +63,7 @@ export class AuthController {
     @Body() userLoginDto: UserLoginDto
   ): Promise<TokenPayloadDto> {
     const userEntity: User = await this.authService.validateUser(userLoginDto);
-    console.log(userEntity)
+    // console.log(userEntity)
 
     const token: TokenPayloadDto =
       await this.authService.createAccessToken(userEntity);
@@ -89,15 +90,20 @@ export class AuthController {
   @Auth(Action.Read, "User")
   @ApiOkResponse({ type: User, description: "current user info" })
   async getCurrentUser(@AuthUser() user: User) {
-    const [profileData, tasks] = await Promise.all([
+    const [profileData, tasks, projects, sharedProjects] = await Promise.all([
       this.userService.getProfileData(user.id),
       this.tasksService.findByUserId(user.id),
+      this.projectService.findByUserId(user.id),
+      this.projectService.findByMemberId(user.id),
+
       // this.assignedServive.getReviews(user.id),
     ]);
 
     return {
       profile: profileData,
       tasks: tasks,
+      projects: projects,
+      sharedProjects: sharedProjects,
 
     };
   }

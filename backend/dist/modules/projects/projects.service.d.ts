@@ -30,12 +30,22 @@ export declare class ProjectsService {
     private schemaModel;
     constructor(schemaModel: Model<ProjectDocument>);
     create(createProjectDto: CreateProjectDto): Promise<ProjectDocument>;
+    AddTaskInProject(projectid: string, taskId: string): Promise<import("mongoose").Document<unknown, {}, ProjectDocument> & ProjectEntity & import("mongoose").Document<any, any, any> & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    AddMembersInProject(projectid: string, membersId: []): Promise<import("mongoose").Document<unknown, {}, ProjectDocument> & ProjectEntity & import("mongoose").Document<any, any, any> & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    RemoveTaskFromProject(projectId: string, taskId: string): Promise<import("mongoose").Document<unknown, {}, ProjectDocument> & ProjectEntity & import("mongoose").Document<any, any, any> & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    findByProjectId(id: string): Promise<any>;
     findall(page?: number, limit?: number): Promise<{
         totalCount: number;
         totalPages: number;
         data: any[];
     }>;
-    findById(postId: string): Promise<ProjectDocument>;
+    findById(id: string): Promise<ProjectDocument>;
     update(id: string, updateDataDto: UpdateProjectDto): Promise<{
         data: import("mongoose").Document<unknown, {}, ProjectDocument> & ProjectEntity & import("mongoose").Document<any, any, any> & {
             _id: import("mongoose").Types.ObjectId;
@@ -50,4 +60,5 @@ export declare class ProjectsService {
         _id: import("mongoose").Types.ObjectId;
     }>>;
     findByUserId(id: string): Promise<any>;
+    findByMemberId(id: string): Promise<any>;
 }

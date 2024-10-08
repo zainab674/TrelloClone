@@ -101,6 +101,67 @@ export const UserProjects = async (token) => {
         console.log(err);
     }
 };
+export const ProjectMembers = async (id, token) => {
+
+
+    try {
+
+
+        const response = await fetch(`http://localhost:1234/Projects/getMembers/${id}`, {
+            method: "GET",
+            headers: {
+                // "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            return;
+        }
+
+        const dataa = await response.json();
+        console.log(" Project members:", dataa);
+        return dataa;
+
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const ProjectDetail = async (id, token) => {
+
+
+    try {
+
+
+        const response = await fetch(`http://localhost:1234/Projects/details/${id}`, {
+            method: "GET",
+            headers: {
+                // "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            return;
+        }
+
+        const dataa = await response.json();
+        console.log(" Project Details:", dataa);
+        return dataa;
+
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 
 
 export const AllUsers = async () => {
@@ -133,7 +194,7 @@ export const AllUsers = async () => {
 
 
 export const CreateTask = async (data, token) => {
-
+    console.log("sending this", data)
 
     try {
 
@@ -172,8 +233,8 @@ export const UpdateTask = async (id, data, token) => {
     try {
 
 
-        const response = await fetch("http://localhost:1234/tasks", {
-            method: "POST",
+        const response = await fetch(`http://localhost:1234/tasks/${id}`, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${token}`
@@ -191,7 +252,7 @@ export const UpdateTask = async (id, data, token) => {
         }
 
         const dataa = await response.json(); // Handle the success response from your API
-        console.log("Task created:", dataa);
+        console.log("Task updated:", dataa);
 
         return dataa;
 
@@ -200,3 +261,72 @@ export const UpdateTask = async (id, data, token) => {
         console.log(err);
     }
 };
+export const DeleteTask = async (id, token) => {
+
+
+    try {
+
+
+        const response = await fetch(`http://localhost:1234/tasks/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+
+
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            return;
+        }
+
+        const dataa = await response.json(); // Handle the success response from your API
+        console.log("Task deleted:");
+
+        // return dataa;
+
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+
+export const GetTasks = async (id) => {
+
+
+    try {
+
+
+        const response = await fetch(`http://localhost:1234/tasks/project/${id}`, {
+            method: "GET",
+            headers: {
+
+            },
+
+
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            return;
+        }
+
+        const dataa = await response.json(); // Handle the success response from your API
+        console.log("Tasks fetched:", dataa);
+
+        return dataa;
+
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+
+
+

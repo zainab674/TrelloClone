@@ -54,7 +54,7 @@ let MailService = class MailService {
       <p>Best regards,<br>Task Runs Team</p>`,
         };
         const transport = await SendGrid.send(mail);
-        console.log(`E-Mail sent to ${mail.to}`);
+        // console.log(`E-Mail sent to ${mail.to}`);
         if (transport[0].statusCode === 202) {
             return `E-Mail sent to ${mail.to}`;
         }
@@ -82,7 +82,7 @@ let MailService = class MailService {
       <p>Best regards,<br>Task Runs Team</p>`,
         };
         const transport = await SendGrid.send(mail);
-        console.log(`E-Mail sent to ${mail.to}`);
+        // console.log(`E-Mail sent to ${mail.to}`);
         if (transport[0].statusCode === 202) {
             return `E-Mail sent to ${mail.to}`;
         }

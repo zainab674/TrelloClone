@@ -35,6 +35,9 @@ const Nav = () => {
     const landing = () => {
         navigate(apiConst.Home)
     }
+    const profile = () => {
+        navigate(apiConst.ProfilePage)
+    }
 
 
 
@@ -63,6 +66,7 @@ const Nav = () => {
                             className="w-8 h-8 rounded-full text-gray-800"
                             src={me.profile.photoURL ? me.profile.photoURL : "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
                             alt="User Profile"
+                            onClick={profile}
                         />
                     </>}
 

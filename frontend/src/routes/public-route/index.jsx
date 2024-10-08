@@ -1,4 +1,4 @@
-import { Landing, Auth, WorkSpace } from '../../pages';
+import { Landing, Auth, WorkSpace, UserProfile } from '../../pages';
 
 const authenticatedRoutes = [
   {
@@ -12,7 +12,11 @@ const authenticatedRoutes = [
     element: Auth,
   },
 
-
+  {
+    key: 2,
+    path: '/profile',
+    element: UserProfile,
+  },
 
 
 ];

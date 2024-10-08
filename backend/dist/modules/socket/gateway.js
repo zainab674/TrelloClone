@@ -30,7 +30,7 @@ let MyGateway = class MyGateway {
         const user = await this.authService.getUserFromToken(token);
         if (user) {
             this.clients.set(user.userId, socket);
-            console.log("Client connected: ", user.userId);
+            // console.log("Client connected: ", user.userId);
             const messages = await this.socketService.getAll(user.userId);
             socket.emit('allMessages', messages);
         }
@@ -43,7 +43,7 @@ let MyGateway = class MyGateway {
         for (let [userId, clientSocket] of this.clients.entries()) {
             if (clientSocket.id === socket.id) {
                 this.clients.delete(userId);
-                console.log("Client disconnected:", userId);
+                // console.log("Client disconnected:", userId);
                 break;
             }
         }
@@ -64,14 +64,14 @@ let MyGateway = class MyGateway {
             }
         }
         createSocketDto.senderId = user.userId;
-        console.log(createSocketDto);
+        // console.log(createSocketDto);
         await this.socketService.create(createSocketDto);
         const recipientSocket = this.clients.get(createSocketDto.recepientId);
         if (recipientSocket) {
             this.server.to(recipientSocket.id).emit('message', createSocketDto.message);
         }
         else {
-            console.log("Recipient not connected");
+            // console.log("Recipient not connected");
         }
     }
     async handleGetUserMessages(socket) {
@@ -104,6 +104,6 @@ __decorate([
 exports.MyGateway = MyGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ port: 1234 }),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
-        socket_service_1.SocketService])
+    socket_service_1.SocketService])
 ], MyGateway);
 //# sourceMappingURL=gateway.js.map

@@ -22,13 +22,10 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 export type UserDocument = User & Document;
 export declare class User {
     id: string;
-    tasks: Types.ObjectId[];
-    projectsCreated: Types.ObjectId[];
-    sharedProjects: Types.ObjectId[];
     displayName: string;
     email: string;
     password: string;
@@ -36,9 +33,9 @@ export declare class User {
     photoURL: string;
 }
 declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, Document<unknown, any, User> & User & {
-    _id: Types.ObjectId;
+    _id: import("mongoose").Types.ObjectId;
 }, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, User, Document<unknown, {}, import("mongoose").FlatRecord<User>> & import("mongoose").FlatRecord<User> & {
-    _id: Types.ObjectId;
+    _id: import("mongoose").Types.ObjectId;
 }>;
 export { UserSchema };
 export declare const userJsonSchema: Record<string, import("openapi3-ts").SchemaObject>;

@@ -29,6 +29,7 @@ exports.constTexts = {
         my: "myTask/",
         users: "usersTask/:id",
         specific: "specific/:id",
+        BYprojectID: "project/:id",
         reply: "reply",
         completedByOther: "completedByOther",
         update: ":id",
@@ -39,7 +40,7 @@ exports.constTexts = {
         withinRadius: "withinRadius"
     },
     projectRoute: {
-        name: "task",
+        name: "Project",
         filter: "filter",
         getAllPosts: "getAllProjects",
         my: "myProject/",
@@ -52,7 +53,8 @@ exports.constTexts = {
         details: "details/:id",
         deleteImage: "deleteImage/:id",
         search: "search",
-        withinRadius: "withinRadius"
+        withinRadius: "withinRadius",
+        projectMembers: "/getMembers/:id"
     },
     assignedRoute: {
         name: "assignTask",

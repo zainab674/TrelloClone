@@ -28,6 +28,48 @@ let ProjectsService = class ProjectsService {
             throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
         });
     }
+    async AddTaskInProject(projectid, taskId) {
+        const project = await this.schemaModel.findById(projectid).exec();
+        if (project) {
+            const updatedProject = await this.schemaModel.findByIdAndUpdate(projectid, { $push: { tasks: taskId } }, { new: true }).exec();
+            return updatedProject;
+        }
+        else {
+            throw new Error('Project not found');
+        }
+    }
+    async AddMembersInProject(projectid, membersId) {
+        const project = await this.schemaModel.findById(projectid).exec();
+        if (project) {
+            const updatedProject = await this.schemaModel.findByIdAndUpdate(projectid, { $push: { members: membersId } }, { new: true }).exec();
+            return updatedProject;
+        }
+        else {
+            throw new Error('Project not found');
+        }
+    }
+    async RemoveTaskFromProject(projectId, taskId) {
+        const project = await this.schemaModel.findById(projectId).exec();
+        if (project) {
+            const updatedProject = await this.schemaModel.findByIdAndUpdate(projectId, { $pull: { tasks: taskId } }, { new: true }).exec();
+            return updatedProject;
+        }
+        else {
+            throw new Error('Project not found');
+        }
+    }
+    async findByProjectId(id) {
+        const project = await this.schemaModel.findById(id)
+            .populate({
+            path: 'members',
+            select: 'id displayName',
+        })
+            .exec();
+        if (!project) {
+            throw new common_1.NotFoundException(`Project with ID ${id} not found.`);
+        }
+        return project.members;
+    }
     async findall(page = 1, limit = 20) {
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
@@ -52,9 +94,9 @@ let ProjectsService = class ProjectsService {
             data: data,
         };
     }
-    async findById(postId) {
+    async findById(id) {
         return this.schemaModel
-            .findById(postId).exec();
+            .findById(id).exec();
     }
     async update(id, updateDataDto) {
         try {
@@ -74,7 +116,6 @@ let ProjectsService = class ProjectsService {
     async findMy(id) {
         try {
             const data = await this.schemaModel.find({ userId: id }).exec();
-            console.log(data);
             return {
                 data,
             };
@@ -94,6 +135,19 @@ let ProjectsService = class ProjectsService {
     async findByUserId(id) {
         const post = await this.schemaModel.find({ userId: id }).exec();
         return post;
+    }
+    async findByMemberId(id) {
+        const projects = await this.schemaModel
+            .find({
+            members: id
+        })
+            .populate({
+            path: 'members',
+            select: 'id displayName photoURL  ',
+        })
+            .select('title isCompleted members  ')
+            .exec();
+        return projects;
     }
 };
 exports.ProjectsService = ProjectsService;

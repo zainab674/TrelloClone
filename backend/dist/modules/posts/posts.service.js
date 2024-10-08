@@ -35,17 +35,17 @@ let PostsService = class PostsService {
         const totalPages = Math.ceil(totalCount.length / limit);
         const data = await this.schemaModel
             .aggregate([
-            {
-                $skip: startIndex,
-            },
-            {
-                $limit: endIndex,
-            },
-        ])
+                {
+                    $skip: startIndex,
+                },
+                {
+                    $limit: endIndex,
+                },
+            ])
             .exec()
             .catch((err) => {
-            throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
-        });
+                throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
+            });
         return {
             totalCount: totalCount.length,
             totalPages: totalPages,
@@ -74,7 +74,7 @@ let PostsService = class PostsService {
     async findMy(id) {
         try {
             const data = await this.schemaModel.find({ userId: id }).exec();
-            console.log(data);
+            // console.log(data);
             return {
                 data,
             };
@@ -120,8 +120,8 @@ let PostsService = class PostsService {
             .findByIdAndDelete(id)
             .exec()
             .catch((err) => {
-            throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
-        });
+                throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
+            });
     }
     async findByUserId(id) {
         const post = await this.schemaModel.find({ userId: id }).exec();

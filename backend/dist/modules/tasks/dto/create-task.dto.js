@@ -9,8 +9,8 @@ class CreateTaskDto extends (0, swagger_1.PickType)(task_schema_1.TaskEntity, [
     "dueDate",
     "priority",
     "status",
-    "isCompleted",
     "projectId",
+    "assignedBy",
     "assignedTo",
 ]) {
 }

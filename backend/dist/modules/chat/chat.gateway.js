@@ -21,12 +21,12 @@ let ChatGateway = class ChatGateway {
         this.connectedUsers = new Map();
     }
     async handleConnection(socket) {
-        console.log("1socketId connected" + socket.id);
+        // console.log("1socketId connected" + socket.id);
         const token = socket.handshake.headers.authorization;
         const user = this.authService.getUserFromToken(token);
-        console.log("user", user);
+        // console.log("user", user);
         if (user) {
-            console.log("user connected" + user + "sockit" + socket.id);
+            // console.log("user connected" + user + "sockit" + socket.id);
             this.connectedUsers.set(user, socket);
             this.userService.chatOpen(user, true);
             return;
@@ -34,16 +34,16 @@ let ChatGateway = class ChatGateway {
     }
     async handleDisconnect(socket) {
         var _a;
-        console.log("disconnect " + socket.id);
+        // console.log("disconnect " + socket.id);
         const userId = (_a = Array.from(this.connectedUsers.entries()).find(([key, value]) => value === socket)) === null || _a === void 0 ? void 0 : _a[0];
-        console.log("disconnect userId " + userId);
+        // console.log("disconnect userId " + userId);
         if (userId) {
             this.userService.chatOpen(userId, false);
             this.connectedUsers.delete(userId);
         }
     }
     async createChat(chat) {
-        console.log(this.connectedUsers);
+        // console.log(this.connectedUsers);
         const recipientSocketId = this.getRecipientSocketId(chat.recipientId.toString());
         if (recipientSocketId) {
             this.server.to(recipientSocketId).emit("messageToClient", chat);
@@ -62,6 +62,6 @@ __decorate([
 exports.ChatGateway = ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: "msg" }),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
-        user_service_1.UserService])
+    user_service_1.UserService])
 ], ChatGateway);
 //# sourceMappingURL=chat.gateway.js.map

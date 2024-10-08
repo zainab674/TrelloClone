@@ -30,10 +30,10 @@ export declare class TaskEntity {
     description: string;
     dueDate: string;
     priority: number;
-    isCompleted: boolean;
     status: string;
     projectId: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
+    assignedBy: mongoose.Types.ObjectId;
     assignedTo: mongoose.Types.ObjectId[];
 }
 declare const TaskSchema: mongoose.Schema<TaskEntity, mongoose.Model<TaskEntity, any, any, any, mongoose.Document<unknown, any, TaskEntity> & TaskEntity & {

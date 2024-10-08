@@ -56,12 +56,19 @@ export class ProjectEntity {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     userId: mongoose.Types.ObjectId;
 
+
     @IsOptional()
-    @IsArray()
-    @IsOptional()
-    @ApiProperty({ description: "Users with whom the Project is shared", type: [String] })
-    @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] })
+    @ApiProperty({
+        description: "Members assigned to tasks",
+        example: ["609c5a6a29a47b0015fb32bd", "609c5a6a29a47b0015fb32be"],
+    })
+    @Prop({
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    })
     members: mongoose.Types.ObjectId[];
+
+
+
 
     @IsOptional()
     @IsArray()

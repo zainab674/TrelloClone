@@ -24,7 +24,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { TaskEntity, TaskDocument } from './schema/task.schema';
 export declare class TasksService {
     private schemaModel;
@@ -38,16 +38,17 @@ export declare class TasksService {
     findById(postId: string): Promise<TaskDocument>;
     update(id: string, updateDataDto: UpdateTaskDto): Promise<{
         data: import("mongoose").Document<unknown, {}, TaskDocument> & TaskEntity & import("mongoose").Document<any, any, any> & {
-            _id: import("mongoose").Types.ObjectId;
+            _id: Types.ObjectId;
         };
     }>;
     findMy(id: string): Promise<{
         data: (import("mongoose").Document<unknown, {}, TaskDocument> & TaskEntity & import("mongoose").Document<any, any, any> & {
-            _id: import("mongoose").Types.ObjectId;
+            _id: Types.ObjectId;
         })[];
     }>;
     deletePost(id: string): Promise<import("mongoose").ModifyResult<import("mongoose").Document<unknown, {}, TaskDocument> & TaskEntity & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>>;
     findByUserId(id: string): Promise<any>;
+    findByProjectId(id: string): Promise<any>;
 }

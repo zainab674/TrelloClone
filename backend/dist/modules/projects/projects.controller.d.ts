@@ -37,6 +37,8 @@ export declare class ProjectsController {
             _id: import("mongoose").Types.ObjectId;
         };
     }>;
+    getProjectMembers(id: string, user: User): Promise<any>;
+    getProject(id: string, user: User): Promise<import("./schema/project.schema").ProjectDocument>;
     findall(page?: number, limit?: number): Promise<{
         totalCount: number;
         totalPages: number;

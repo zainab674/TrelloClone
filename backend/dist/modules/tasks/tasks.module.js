@@ -14,6 +14,7 @@ const axios_1 = require("@nestjs/axios");
 const mongoose_1 = require("@nestjs/mongoose");
 const user_module_1 = require("../user/user.module");
 const task_schema_1 = require("./schema/task.schema");
+const projects_module_1 = require("../projects/projects.module");
 let TasksModule = class TasksModule {
 };
 exports.TasksModule = TasksModule;
@@ -21,6 +22,7 @@ exports.TasksModule = TasksModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: task_schema_1.TaskEntity.name, schema: task_schema_1.TaskSchema }]),
+            projects_module_1.ProjectsModule,
             user_module_1.UserModule,
             axios_1.HttpModule,
         ],

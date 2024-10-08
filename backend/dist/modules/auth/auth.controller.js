@@ -28,11 +28,13 @@ const user_login_dto_1 = require("./dto/user.login.dto");
 const TokenPayloadDto_1 = require("./dto/TokenPayloadDto");
 const user_signup_dto_1 = require("./dto/user.signup.dto");
 const tasks_service_1 = require("../tasks/tasks.service");
+const projects_service_1 = require("../projects/projects.service");
 let AuthController = class AuthController {
-    constructor(userService, authService, tasksService) {
+    constructor(userService, authService, tasksService, projectService) {
         this.userService = userService;
         this.authService = authService;
         this.tasksService = tasksService;
+        this.projectService = projectService;
     }
     async generateString(length) {
         let result = "";
@@ -45,7 +47,6 @@ let AuthController = class AuthController {
     }
     async userLogin(userLoginDto) {
         const userEntity = await this.authService.validateUser(userLoginDto);
-        console.log(userEntity);
         const token = await this.authService.createAccessToken(userEntity);
         return token;
     }
@@ -53,13 +54,17 @@ let AuthController = class AuthController {
         return await this.userService.createUser(userRegisterDto);
     }
     async getCurrentUser(user) {
-        const [profileData, tasks] = await Promise.all([
+        const [profileData, tasks, projects, sharedProjects] = await Promise.all([
             this.userService.getProfileData(user.id),
             this.tasksService.findByUserId(user.id),
+            this.projectService.findByUserId(user.id),
+            this.projectService.findByMemberId(user.id),
         ]);
         return {
             profile: profileData,
             tasks: tasks,
+            projects: projects,
+            sharedProjects: sharedProjects,
         };
     }
 };
@@ -103,6 +108,7 @@ exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiTags)(constants_1.constTexts.authRoute.name),
     __metadata("design:paramtypes", [user_service_1.UserService,
         auth_service_1.AuthService,
-        tasks_service_1.TasksService])
+        tasks_service_1.TasksService,
+        projects_service_1.ProjectsService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

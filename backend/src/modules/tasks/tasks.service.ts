@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { TaskEntity, TaskDocument } from './schema/task.schema';
 import { ResponseCode } from 'src/exceptions';
 
@@ -84,7 +84,7 @@ export class TasksService {
   async findMy(id: string) {
     try {
       const data = await this.schemaModel.find({ userId: id }).exec();
-      console.log(data)
+      // console.log(data)
       return {
         data,
       };
@@ -105,7 +105,21 @@ export class TasksService {
 
   //////////////////////////POSTS BY USERID
   async findByUserId(id: string): Promise<any> {
-    const post = await this.schemaModel.find({ userId: id }).exec();
+    const post = await this.schemaModel.find({ userId: id })
+      .populate({
+        path: 'projectId',
+        select: 'id title',  // Ensure you are selecting the `id` field
+      })
+      .exec();
+
+    return post;
+  }
+  //////////////////////////POSTS BY ProjectID
+  async findByProjectId(id: string): Promise<any> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new Error('Invalid projectId');
+    }
+    const post = await this.schemaModel.find({ projectId: id }).exec();
 
     return post;
   }

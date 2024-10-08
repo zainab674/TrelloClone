@@ -31,11 +31,11 @@ let PostsController = class PostsController {
     }
     async create(user, createDto) {
         createDto.userId = user.id;
-        console.log(createDto);
+        // console.log(createDto);
         return this.postsService.create(createDto);
     }
     async update(user, id, images, updateDatato) {
-        console.log(updateDatato);
+        // console.log(updateDatato);
         const cid = user.id;
         return this.postsService.update(id, updateDatato, cid);
     }
@@ -47,7 +47,7 @@ let PostsController = class PostsController {
         return this.postsService.findMy(id);
     }
     async findUP(id) {
-        console.log(id);
+        // console.log(id);
         return this.postsService.findMy(id);
     }
     async deletePost(id) {
@@ -71,7 +71,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_schema_1.User,
-        createPost_dto_1.CreatePost]),
+    createPost_dto_1.CreatePost]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "create", null);
 __decorate([
@@ -89,7 +89,7 @@ __decorate([
     __param(3, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_schema_1.User, String, Array,
-        updatePost_dto_1.UpdatePostDto]),
+    updatePost_dto_1.UpdatePostDto]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "update", null);
 __decorate([

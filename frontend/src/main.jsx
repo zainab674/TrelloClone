@@ -7,7 +7,7 @@ import { AuthProvider } from './Authcontext.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <div className='font-poppins'><App /></div>
     </AuthProvider>,
   </React.StrictMode>,
 )

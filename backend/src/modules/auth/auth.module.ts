@@ -8,6 +8,7 @@ import { JwtStrategy } from "./jwt.strategy";
 import { AppConfig } from "./../../configuration/app.config";
 import { HttpModule } from "@nestjs/axios";
 import { TasksModule } from "../tasks/tasks.module";
+import { ProjectsModule } from "../projects/projects.module";
 // import { TasksService } from "../tasks/tasks.service";
 // import { PostsModule } from "../posts/posts.module";
 // import { AssignedTasksModule } from "../assigned-tasks/assigned-tasks.module";
@@ -26,8 +27,9 @@ import { TasksModule } from "../tasks/tasks.module";
     }),
     // AssignedTasksModule,
     HttpModule,
-    // PostsModule,
+    ProjectsModule,
     TasksModule
+
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

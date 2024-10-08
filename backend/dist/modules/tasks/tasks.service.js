@@ -74,7 +74,6 @@ let TasksService = class TasksService {
     async findMy(id) {
         try {
             const data = await this.schemaModel.find({ userId: id }).exec();
-            console.log(data);
             return {
                 data,
             };
@@ -92,7 +91,19 @@ let TasksService = class TasksService {
         });
     }
     async findByUserId(id) {
-        const post = await this.schemaModel.find({ userId: id }).exec();
+        const post = await this.schemaModel.find({ userId: id })
+            .populate({
+            path: 'projectId',
+            select: 'id title',
+        })
+            .exec();
+        return post;
+    }
+    async findByProjectId(id) {
+        if (!mongoose_2.Types.ObjectId.isValid(id)) {
+            throw new Error('Invalid projectId');
+        }
+        const post = await this.schemaModel.find({ projectId: id }).exec();
         return post;
     }
 };

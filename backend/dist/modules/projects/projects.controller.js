@@ -29,12 +29,17 @@ let ProjectsController = class ProjectsController {
     }
     async create(user, createDto) {
         createDto.userId = user.id;
-        console.log(createDto);
         return this.projectsService.create(createDto);
     }
     async update(id, updateDatato) {
-        console.log(updateDatato);
+        console.log("uuuu", updateDatato);
         return this.projectsService.update(id, updateDatato);
+    }
+    async getProjectMembers(id, user) {
+        return this.projectsService.findByProjectId(id);
+    }
+    async getProject(id, user) {
+        return this.projectsService.findById(id);
     }
     findall(page = 1, limit = 20) {
         return this.projectsService.findall(page, limit);
@@ -44,7 +49,6 @@ let ProjectsController = class ProjectsController {
         return this.projectsService.findMy(id);
     }
     async findUP(id) {
-        console.log(id);
         return this.projectsService.findMy(id);
     }
     async deletePost(id) {
@@ -53,10 +57,10 @@ let ProjectsController = class ProjectsController {
 };
 exports.ProjectsController = ProjectsController;
 __decorate([
-    (0, decorators_1.Auth)(userRoles_1.Action.Create, "Task"),
+    (0, decorators_1.Auth)(userRoles_1.Action.Create, "Project"),
     (0, common_1.Post)(),
     (0, decorators_1.ApiPageOkResponse)({
-        description: "Create Task",
+        description: "Create Project",
         type: project_schema_1.ProjectEntity,
     }),
     __param(0, (0, decorators_1.AuthUser)()),
@@ -67,10 +71,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProjectsController.prototype, "create", null);
 __decorate([
-    (0, decorators_1.Auth)(userRoles_1.Action.Update, "Task"),
+    (0, decorators_1.Auth)(userRoles_1.Action.Update, "Project"),
     (0, common_1.Put)(constants_1.constTexts.projectRoute.update),
     (0, decorators_1.ApiPageOkResponse)({
-        description: "Update Task",
+        description: "Update Project",
         type: project_schema_1.ProjectEntity,
     }),
     __param(0, (0, common_1.Param)("id")),
@@ -79,6 +83,32 @@ __decorate([
     __metadata("design:paramtypes", [String, update_project_dto_1.UpdateProjectDto]),
     __metadata("design:returntype", Promise)
 ], ProjectsController.prototype, "update", null);
+__decorate([
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Project"),
+    (0, common_1.Get)(constants_1.constTexts.projectRoute.projectMembers),
+    (0, decorators_1.ApiPageOkResponse)({
+        description: "Get Project Members",
+        type: project_schema_1.ProjectEntity,
+    }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, decorators_1.AuthUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, user_schema_1.User]),
+    __metadata("design:returntype", Promise)
+], ProjectsController.prototype, "getProjectMembers", null);
+__decorate([
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Project"),
+    (0, common_1.Get)(constants_1.constTexts.projectRoute.details),
+    (0, decorators_1.ApiPageOkResponse)({
+        description: "Get Project ",
+        type: project_schema_1.ProjectEntity,
+    }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, decorators_1.AuthUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, user_schema_1.User]),
+    __metadata("design:returntype", Promise)
+], ProjectsController.prototype, "getProject", null);
 __decorate([
     (0, common_1.Get)(constants_1.constTexts.projectRoute.getAllPosts),
     (0, decorators_1.ApiPageOkResponse)({

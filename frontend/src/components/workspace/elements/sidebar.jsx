@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiChevronDown, FiChevronUp, FiSettings, FiActivity, FiCreditCard, FiGrid } from 'react-icons/fi';
 import { HiOutlineBuildingOffice } from 'react-icons/hi2';
 import Boards from './boards';
+
 
 const Sidebar = () => {
     const [isAnotherOpen, setIsAnotherOpen] = useState(false);
     const [isTestOpen, setIsTestOpen] = useState(false);
     const [boards, setBoards] = useState(true);
+
 
     return (
         <div className='flex'>

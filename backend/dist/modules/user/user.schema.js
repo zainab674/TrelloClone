@@ -14,35 +14,10 @@ const mongoose_1 = require("@nestjs/mongoose");
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const class_validator_jsonschema_1 = require("class-validator-jsonschema");
-const mongoose_2 = require("mongoose");
 const utils_1 = require("../../common/utils");
 let User = class User {
 };
 exports.User = User;
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        type: [String],
-        description: 'Array of Task IDs',
-    }),
-    (0, mongoose_1.Prop)({ type: [mongoose_2.Types.ObjectId], ref: 'Tasks' }),
-    __metadata("design:type", Array)
-], User.prototype, "tasks", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        type: [String],
-        description: 'Array of Projects IDs',
-    }),
-    (0, mongoose_1.Prop)({ type: [mongoose_2.Types.ObjectId], ref: 'Projects' }),
-    __metadata("design:type", Array)
-], User.prototype, "projectsCreated", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        type: [String],
-        description: 'Array of  Shared Projects IDs',
-    }),
-    (0, mongoose_1.Prop)({ type: [mongoose_2.Types.ObjectId], ref: 'Projects' }),
-    __metadata("design:type", Array)
-], User.prototype, "sharedProjects", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

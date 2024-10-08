@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 
-const ProjectModal = ({ isOpen, onClose, onSubmit }) => {
+const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
     const [projectTitle, setProjectTitle] = useState('');
+    const [assignedTo, setAssignedTo] = useState('');
+    const [assignedToID, setAssignedToID] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (projectTitle) {
-            onSubmit(projectTitle); // Call the onSubmit prop with the project title
-            setProjectTitle(''); // Reset input field
-            onClose(); // Close the modal
+        if (projectTitle && assignedToID) {
+            onSubmit(projectTitle, assignedToID);
+            setProjectTitle('');
+            setAssignedToID('');
+            setAssignedTo('');
+            onClose();
         }
     };
 
-    if (!isOpen) return null; // Don't render anything if the modal is not open
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
@@ -29,6 +33,30 @@ const ProjectModal = ({ isOpen, onClose, onSubmit }) => {
                             required
                         />
                     </label>
+                    <select
+                        multiple
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        value={assignedToID} // Keep this as assignedToID
+                        onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions);
+                            setAssignedTo(selectedOptions.map(option => option.value));  // Display names
+                            setAssignedToID(selectedOptions.map(option => option.getAttribute('data-id')));  // IDs
+                        }}
+                    >
+                        <option value="" disabled>
+                            Add Members
+                        </option>
+                        {users.map((user) => (
+                            <option
+                                key={user.id}
+                                value={user.displayName}
+                                data-id={user.id}
+
+                            >
+                                {user.displayName}
+                            </option>
+                        ))}
+                    </select>
                     <div className="flex justify-end">
                         <button
                             type="button"

@@ -7,9 +7,8 @@ export class CreateTaskDto extends PickType(TaskEntity, [
     "dueDate",
     "priority",
     "status",
-    "isCompleted",
     "projectId",
-
+    "assignedBy",
     "assignedTo",
 
 
