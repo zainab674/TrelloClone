@@ -28,7 +28,7 @@ export declare class ProjectEntity {
     id: string;
     title: string;
     description: string;
-    dueDate: Date;
+    dueDate: string;
     isCompleted: boolean;
     userId: mongoose.Types.ObjectId;
     members: mongoose.Types.ObjectId[];

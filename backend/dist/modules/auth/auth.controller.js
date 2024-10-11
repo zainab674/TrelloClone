@@ -67,6 +67,16 @@ let AuthController = class AuthController {
             sharedProjects: sharedProjects,
         };
     }
+    async delete(user, pid) {
+        try {
+            await this.tasksService.deleteByProjectId(pid);
+            await this.projectService.deletePost(pid);
+            return { message: 'Project and its tasks deleted successfully' };
+        }
+        catch (error) {
+            throw new common_1.HttpException('Error deleting project', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -103,6 +113,16 @@ __decorate([
     __metadata("design:paramtypes", [user_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getCurrentUser", null);
+__decorate([
+    (0, common_1.Delete)(constants_1.constTexts.authRoute.delete),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "User"),
+    __param(0, (0, decorators_1.AuthUser)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_schema_1.User, String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "delete", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)(constants_1.constTexts.authRoute.name),
     (0, swagger_1.ApiTags)(constants_1.constTexts.authRoute.name),

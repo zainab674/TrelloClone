@@ -123,5 +123,13 @@ export class TasksService {
 
     return post;
   }
+  async deleteByProjectId(id: string): Promise<any> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new Error('Invalid projectId');
+    }
+    const post = await this.schemaModel.deleteMany({ projectId: id }).exec();
+
+    return post;
+  }
 
 }

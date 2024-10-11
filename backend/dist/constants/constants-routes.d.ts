@@ -18,6 +18,7 @@ export declare const constTexts: {
         otpResend: string;
         logOut: string;
         blockUserAccount: string;
+        delete: string;
     };
     taskRoute: {
         name: string;

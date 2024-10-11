@@ -48,4 +48,7 @@ export declare class AuthController {
         projects: any;
         sharedProjects: any;
     }>;
+    delete(user: User, pid: string): Promise<{
+        message: string;
+    }>;
 }

@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
     IsArray,
     IsBoolean,
-    IsDate,
+
     IsOptional,
     IsString,
 
@@ -38,11 +38,10 @@ export class ProjectEntity {
     description: string;
 
     @IsOptional()
-    @IsDate()
-    @IsOptional()
+    @IsString()
     @ApiProperty({ description: "Due date of the Project" })
-    @Prop({ type: Date })
-    dueDate: Date;
+    @Prop({ type: String })
+    dueDate: string;
 
     @IsOptional()
     @IsBoolean()

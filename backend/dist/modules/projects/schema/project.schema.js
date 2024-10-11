@@ -34,11 +34,10 @@ __decorate([
 ], ProjectEntity.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)({ description: "Due date of the Project" }),
-    (0, mongoose_1.Prop)({ type: Date }),
-    __metadata("design:type", Date)
+    (0, mongoose_1.Prop)({ type: String }),
+    __metadata("design:type", String)
 ], ProjectEntity.prototype, "dueDate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),

@@ -18,6 +18,7 @@ export const constTexts = {
     otpResend: "otpResend",
     logOut: "logOut",
     blockUserAccount: "blockUserAccount/:id",
+    delete: "deleteProject/:id",
   },
   taskRoute: {
     name: "task",

@@ -3,15 +3,16 @@ import ProjectModal from './projectmodal';
 import Board from './BoardCard';
 import { useAuth } from '../../../Authcontext';
 import { AllUsers, CreateProject, UserProjects } from '../../../api/allApis';
+import { useNavigate } from 'react-router-dom';
 
 const Boards = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { token } = useAuth();
-    const [myProj, setMyProj] = useState([]); // Initialize as an empty array
-    const [users, setUsers] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
+    const { me, loading } = useAuth();
 
-
-
+    const [users, setUsers] = useState('');
+    const navigate = useNavigate();
     const FetchAllUsers = async () => {
         try {
             const res = await AllUsers();
@@ -20,20 +21,6 @@ const Boards = () => {
             console.error("Error fetching users:", error);
         }
     };
-
-    const FetchProjects = async () => {
-        try {
-            const res = await UserProjects(token);
-
-
-
-            setMyProj(res.data);
-
-        } catch (error) {
-            console.error("Error fetching projects:", error);
-        }
-    };
-
     const handleProjectSubmit = async (projectTitle, assignedToID) => {
         const data = {
             title: projectTitle,
@@ -42,16 +29,35 @@ const Boards = () => {
         try {
             const result = await CreateProject(data, token);
             console.log("Project created:", result);
-            FetchProjects(); // Refresh the project list after creation
+            // Refresh the project list after creation
         } catch (error) {
             console.error("Error creating project:", error);
         }
     };
-
     useEffect(() => {
-        FetchProjects(); // Fetch projects on component mount
-        FetchAllUsers()
-    }, []);
+        // Wait until the authentication state is loaded
+        if (!loading && me) {
+            setIsLoading(false);
+            FetchAllUsers()
+        }
+    }, [loading, me, navigate]);
+
+    if (isLoading || !me) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Loading profile...</p>
+            </div>
+        );
+    }
+
+
+
+
+
+
+
+
+
 
     return (
         <div className="p-6">
@@ -86,8 +92,23 @@ const Boards = () => {
 
                 {/* Boards Grid */}
                 <div className="grid grid-cols-2 gap-4">
-                    {myProj && myProj.length > 0 ? (
-                        myProj.map((proj, index) => (
+                    {me.projects && me.projects.length > 0 ? (
+                        me.projects.map((proj, index) => (
+                            <Board key={index} proj={proj} />
+                        ))
+                    ) : (
+                        <p>No projects found.</p> // Display a message if no projects
+                    )}
+                </div>
+            </div>
+            <div className="mt-20">
+                <h2 className="text-xl font-semibold mb-4">Assigned projects</h2>
+
+
+                {/* Boards Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                    {me.sharedProjects && me.sharedProjects.length > 0 ? (
+                        me.sharedProjects.map((proj, index) => (
                             <Board key={index} proj={proj} />
                         ))
                     ) : (

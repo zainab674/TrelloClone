@@ -51,4 +51,5 @@ export declare class TasksService {
     }>>;
     findByUserId(id: string): Promise<any>;
     findByProjectId(id: string): Promise<any>;
+    deleteByProjectId(id: string): Promise<any>;
 }

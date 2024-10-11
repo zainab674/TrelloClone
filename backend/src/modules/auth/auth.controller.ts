@@ -1,10 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
 
+  HttpException,
+
   HttpStatus,
+  Param,
   Post,
 } from "@nestjs/common";
 import { UseGuards } from "@nestjs/common/decorators/core/use-guards.decorator";
@@ -107,6 +111,29 @@ export class AuthController {
 
     };
   }
+  /////////////////////MY PROFILE
+  @Delete(constTexts.authRoute.delete)
+  @HttpCode(HttpStatus.OK)
+  @Auth(Action.Read, "User")
+  // @ApiOkResponse({ type: User, description: "Delete Project" })
+  async delete(
+    @AuthUser() user: User,
+    @Param("id") pid: string
+  ) {
+    try {
+      // Delete tasks associated with the project
+      await this.tasksService.deleteByProjectId(pid); // Pass the project ID to delete related tasks
+
+      // Delete the project itself
+      await this.projectService.deletePost(pid); // Pass user ID for authorization
+
+      return { message: 'Project and its tasks deleted successfully' }; // Success response
+    } catch (error) {
+      // Handle errors appropriately
+      throw new HttpException('Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 
 
 }

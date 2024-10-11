@@ -33,6 +33,32 @@ export const Profile = async (token) => {
         console.log(err);
     }
 };
+export const DeleteProject = async (id, token) => {
+    try {
+        console.log("Authorization Token: ", token); // Log the token
+
+        const response = await fetch(`http://localhost:1234/auth/deleteProject/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}` // Ensure "Authorization" is correctly capitalized
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error deleting project:", errorData); // Log error details
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Deleted project:", data);
+        return data;
+
+    } catch (err) {
+        console.error("Error in DeleteProject:", err); // Log the error
+    }
+};
+
 
 
 export const CreateProject = async (data, token) => {
@@ -43,6 +69,40 @@ export const CreateProject = async (data, token) => {
 
         const response = await fetch("http://localhost:1234/Projects", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(
+                data
+            ),
+
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData);
+            return;
+        }
+
+        const dataa = await response.json(); // Handle the success response from your API
+        console.log("Project created:", dataa);
+
+        return dataa;
+
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const UpdateProject = async (id, data, token) => {
+
+
+    try {
+
+
+        const response = await fetch(`http://localhost:1234/Projects/${id}`, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${token}`

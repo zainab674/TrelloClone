@@ -106,6 +106,13 @@ let TasksService = class TasksService {
         const post = await this.schemaModel.find({ projectId: id }).exec();
         return post;
     }
+    async deleteByProjectId(id) {
+        if (!mongoose_2.Types.ObjectId.isValid(id)) {
+            throw new Error('Invalid projectId');
+        }
+        const post = await this.schemaModel.deleteMany({ projectId: id }).exec();
+        return post;
+    }
 };
 exports.TasksService = TasksService;
 exports.TasksService = TasksService = __decorate([
