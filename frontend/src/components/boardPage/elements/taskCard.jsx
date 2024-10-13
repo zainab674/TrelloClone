@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { Menu, Transition } from '@headlessui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs'; // Import from react-icons
+import ConfirmDelete from '../../../constants/ConfiirmDelete';
 
-const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, users }) => {
+const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, users, me, project }) => {
+
+    console.log("opp", project)
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [{ isDragging }, drag] = useDrag({
         type: 'task',
@@ -12,6 +15,14 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
             isDragging: monitor.isDragging(),
         }),
     });
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const handleCancelDeleteTask = async (e) => {
+        e.stopPropagation();
+        setIsDeleteModalOpen(false)
+        // closeDetailsModal();
+    };
+
 
     const getPriorityLabel = (priority) => {
         switch (priority) {
@@ -29,10 +40,21 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
     const { label: priorityLabel, bgColor: priorityBgColor, color: priorityColor } = getPriorityLabel(task.priority);
 
     // Find user photos based on assigned user IDs
-    const assignedUserPhotos = task.assignedTo.map(userId => {
-        const user = users.find(user => user.id === userId);
-        return user ? user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" : null; // Return the user's photoURL or null if not found
-    }).filter(photo => photo !== null); // Filter out any null values
+
+
+
+    const assignedUserPhotos = task.assignedTo
+        .map(userId => {
+            // Find the user in the 'users' array by their 'id'
+            const user = users.find(user => user.id === userId);
+
+            // Return the user's 'photoURL' or a default profile picture if the user exists, otherwise return null
+            return user ? (user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png") : null;
+        })
+        .filter(photo => photo !== null); // Filter out any null values (for missing users)
+
+
+
 
     return (
         <div
@@ -48,66 +70,78 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
                 <span className={`text-xs px-1 py-0.5 rounded  ${priorityBgColor}  ${priorityColor}`}>
                     {priorityLabel}
                 </span>
-                <div className="relative inline-block text-left">
-                    <Menu>
-                        <div>
-                            <Menu.Button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsMenuOpen(!isMenuOpen)
-                                }} // Toggle menu on icon click
-                                className="inline-flex justify-center w-full text-sm font-medium text-gray-700 hover:text-gray-900"
-                            >
-                                <BsThreeDotsVertical className="w-5 h-5" />
-                            </Menu.Button>
-                        </div>
-                        <Transition
-                            show={isMenuOpen}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                        >
-                            <Menu.Items className="absolute right-0 w-28 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none"
-                                onClick={() => {
 
-                                    setIsMenuOpen(false); // Close menu after selection
-                                }}
-                            >
-                                <div className="py-1">
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                onClick={(e) => {
-                                                    openEditModal(task, e);
-                                                    setIsMenuOpen(false); // Close menu after selection
-                                                }}
-                                                className={`flex w-full px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
-                                            >
-                                                Edit
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                onClick={() => {
-                                                    handleDeleteTask(task.id);
-                                                    setIsMenuOpen(false); // Close menu after selection
-                                                }}
-                                                className={`flex w-full px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
-                                            >
-                                                Delete
-                                            </button>
-                                        )}
-                                    </Menu.Item>
+                {(project.userId === me.profile._id) ?
+                    <>
+
+                        <div className="relative inline-block text-left">
+                            <Menu>
+                                <div>
+                                    <Menu.Button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsMenuOpen(!isMenuOpen)
+                                        }} // Toggle menu on icon click
+                                        className="inline-flex justify-center w-full text-sm font-medium text-gray-700 hover:text-gray-900"
+                                    >
+                                        <BsThreeDotsVertical className="w-5 h-5" />
+                                    </Menu.Button>
                                 </div>
-                            </Menu.Items>
-                        </Transition>
-                    </Menu>
-                </div>
+                                <Transition
+                                    show={isMenuOpen}
+                                    enter="transition ease-out duration-100"
+                                    enterFrom="transform opacity-0 scale-95"
+                                    enterTo="transform opacity-100 scale-100"
+                                    leave="transition ease-in duration-75"
+                                    leaveFrom="transform opacity-100 scale-100"
+                                    leaveTo="transform opacity-0 scale-95"
+                                >
+                                    <Menu.Items className="absolute right-0 w-28 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none"
+                                        onClick={() => {
+
+                                            setIsMenuOpen(false); // Close menu after selection
+                                        }}
+                                    >
+                                        <div className="py-1">
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            openEditModal(task, e);
+                                                            setIsMenuOpen(false); // Close menu after selection
+                                                        }}
+                                                        className={`flex w-full px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // Prevent the click from opening the detail modal
+                                                            setIsDeleteModalOpen(true);
+                                                            setIsMenuOpen(false); // Close menu after selection
+                                                        }}
+                                                        className={`flex w-full px-4 py-2 text-sm text-gray-700 ${active ? 'bg-gray-100' : ''}`}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                )}
+                                            </Menu.Item>
+                                        </div>
+                                    </Menu.Items>
+                                </Transition>
+                            </Menu>
+                        </div>
+                    </>
+                    :
+                    <>
+
+                    </>
+                }
+
             </div>
 
             {/* Second row: Task name */}
@@ -124,6 +158,16 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
                     />
                 ))}
             </div>
+
+
+
+
+
+            {isDeleteModalOpen && (
+                <ConfirmDelete
+                    handleDeletePost={() => handleDeleteTask(task.id)}
+                    handleCancelDelete={handleCancelDeleteTask} />
+            )}
         </div>
     );
 };

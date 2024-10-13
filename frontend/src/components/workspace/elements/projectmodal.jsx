@@ -15,6 +15,14 @@ const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
             onClose();
         }
     };
+    const Close = (e) => {
+        e.preventDefault();
+        if (assignedToID) {
+
+            setAssignedTo('');
+            onClose();
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -33,6 +41,9 @@ const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
                             required
                         />
                     </label>
+
+
+
                     <select
                         multiple
                         className="w-full p-2 border border-gray-300 rounded-md"
@@ -51,16 +62,30 @@ const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
                                 key={user.id}
                                 value={user.displayName}
                                 data-id={user.id}
-
                             >
                                 {user.displayName}
                             </option>
                         ))}
                     </select>
+
+                    {/* Display Selected Users */}
+                    <div className="mt-4">
+                        <h3 className="text-lg font-semibold">Selected Members:</h3>
+                        {assignedTo.length > 0 ? (
+                            <ul className="list-disc pl-5">
+                                {assignedTo.map((member, index) => (
+                                    <li key={index}>{member}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No members selected.</p>
+                        )}
+                    </div>
+
                     <div className="flex justify-end">
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={Close}
                             className="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
                         >
                             Cancel

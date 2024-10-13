@@ -112,15 +112,46 @@ export class AuthController {
     };
   }
   /////////////////////MY PROFILE
+  // @Delete(constTexts.authRoute.delete)
+  // @HttpCode(HttpStatus.OK)
+  // @Auth(Action.Read, "User")
+  // // @ApiOkResponse({ type: User, description: "Delete Project" })
+  // async delete(
+  //   @AuthUser() user: User,
+  //   @Param("id") pid: string
+  // ) {
+  //   try {
+  //     // Delete tasks associated with the project
+  //     await this.tasksService.deleteByProjectId(pid); // Pass the project ID to delete related tasks
+
+  //     // Delete the project itself
+  //     await this.projectService.deletePost(pid); // Pass user ID for authorization
+
+  //     return { message: 'Project and its tasks deleted successfully' }; // Success response
+  //   } catch (error) {
+  //     // Handle errors appropriately
+  //     throw new HttpException('Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  // }
+
+
+
   @Delete(constTexts.authRoute.delete)
   @HttpCode(HttpStatus.OK)
   @Auth(Action.Read, "User")
-  // @ApiOkResponse({ type: User, description: "Delete Project" })
   async delete(
-    @AuthUser() user: User,
-    @Param("id") pid: string
+    @AuthUser() user: User, // Authenticated user
+    @Param("id") pid: string // Project ID
   ) {
     try {
+      // Fetch the project to check ownership
+      const project = await this.projectService.findById(pid);
+
+
+      if (!project || project.userId.toString() !== user.id) {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
+
       // Delete tasks associated with the project
       await this.tasksService.deleteByProjectId(pid); // Pass the project ID to delete related tasks
 
@@ -130,7 +161,7 @@ export class AuthController {
       return { message: 'Project and its tasks deleted successfully' }; // Success response
     } catch (error) {
       // Handle errors appropriately
-      throw new HttpException('Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message || 'Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

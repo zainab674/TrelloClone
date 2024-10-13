@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../Authcontext";
 import { LogOut } from "../../../api/authfunction";
 import { Profile } from "../../../api/allApis";
+import { LoadingSpinner } from "../../../constants/loadingSpinner";
 
 
 
@@ -24,7 +25,7 @@ const Nav = () => {
     const { me } = useAuth();
 
     const [Login, setLogin] = useState(true);
-
+    const [isLoading, setIsLoading] = useState(true);
 
     console.log("uuuuuu", me)
 
@@ -35,12 +36,28 @@ const Nav = () => {
     const landing = () => {
         navigate(apiConst.Home)
     }
+    const dash = () => {
+        navigate(apiConst.Workspace)
+    }
     const profile = () => {
         navigate(apiConst.ProfilePage)
     }
 
 
+    useEffect(() => {
+        // Wait until the authentication state is loaded
+        if (token, me) {
+            setIsLoading(false);
 
+
+        }
+    }, [token, me]);
+
+    if (isLoading || !token) {
+        return (
+            <LoadingSpinner />
+        );
+    }
 
     const logout = () => {
 
@@ -54,9 +71,8 @@ const Nav = () => {
         <header className="w-full py-4 flex justify-between items-center px-6 bg-white shadow-md">
             <div className="flex gap-4">
                 <div className="md:text-2xl text-lg font-bold text-gray-800" onClick={landing}>Taskify</div>
-                <button className="bg-blue-800 text-white px-2 py-1 rounded-md">
-                    Create
-                </button>
+                <div className="md:text-2xl text-lg font-bold text-gray-800" onClick={dash}>DashBoard</div>
+
             </div>
             <div className="flex gap-4">
                 {me &&

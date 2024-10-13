@@ -1,4 +1,4 @@
-const TaskDetails = ({ selectedTask, closeDetailsModal, users }) => {
+export const TaskDetails = ({ selectedTask, closeDetailsModal, users }) => {
     if (!selectedTask) return null;
 
 
@@ -49,7 +49,50 @@ const TaskDetails = ({ selectedTask, closeDetailsModal, users }) => {
         </div>
     );
 };
+export const ProjectDetails = ({ selectedProject, closeDetailsModal, users }) => {
+    if (!selectedProject) return null;
+    const creator = users.find(user => user.id === selectedProject.userId);
 
 
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            onClick={(e) => {
+                e.stopPropagation();
+                closeDetailsModal();
+            }}>
 
-export default TaskDetails;
+            <div className="bg-white p-4 rounded shadow-lg w-96" onClick={(e) => e.stopPropagation()}>
+                <button className="text-right mb-4" onClick={(e) => {
+                    e.stopPropagation();
+                    closeDetailsModal();
+                }}>Close</button>
+
+                <h3 className="text-xl font-bold">{selectedProject.title}</h3>
+
+                <p>Due Date: {selectedProject.dueDate}</p>
+                <p>Created By: {creator?.displayName}</p>
+
+                <div>
+                    <h4>Assigned To:</h4>
+                    <div className="flex space-x-2">
+                        {selectedProject.members.map(userId => {
+                            const user = users.find(user => user.id === userId);
+                            return (
+                                <div key={userId} className="flex items-center space-x-2">
+                                    <img
+                                        src={user?.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+                                        alt={user?.displayName}
+                                        className="w-8 h-8 rounded-full"
+                                    />
+                                    <p>{user?.displayName}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+

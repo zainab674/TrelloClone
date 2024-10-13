@@ -9,19 +9,6 @@ class GeneratorProvider {
     static fileName(ext) {
         return GeneratorProvider.uuid() + '.' + ext;
     }
-    static getS3PublicUrl(key) {
-        if (!key) {
-            return;
-        }
-        return `https://s3.${process.env.AWS_S3_BUCKET_NAME_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${key}`;
-    }
-    static getS3Key(publicUrl) {
-        if (!publicUrl) {
-            return;
-        }
-        const exec = new RegExp(`(?<=https://s3.${process.env.AWS_S3_BUCKET_NAME_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/).*`).exec(publicUrl);
-        return exec === null || exec === void 0 ? void 0 : exec[0];
-    }
     static generateVerificationCode() {
         return Math.floor(1000 + Math.random() * 9000).toString();
     }

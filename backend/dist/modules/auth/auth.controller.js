@@ -69,12 +69,16 @@ let AuthController = class AuthController {
     }
     async delete(user, pid) {
         try {
+            const project = await this.projectService.findById(pid);
+            if (!project || project.userId.toString() !== user.id) {
+                throw new common_1.HttpException('Unauthorized', common_1.HttpStatus.UNAUTHORIZED);
+            }
             await this.tasksService.deleteByProjectId(pid);
             await this.projectService.deletePost(pid);
             return { message: 'Project and its tasks deleted successfully' };
         }
         catch (error) {
-            throw new common_1.HttpException('Error deleting project', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new common_1.HttpException(error.message || 'Error deleting project', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 };

@@ -6,6 +6,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
     const [dueDate, setDueDate] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
     const [assignedToID, setAssignedToID] = useState([]);
+    const [assignedTo, setAssignedTo] = useState([]);
 
     useEffect(() => {
         if (isOpen) {
@@ -14,11 +15,13 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
             setDueDate(initialData.dueDate || '');
             setIsCompleted(initialData.isCompleted || false);
             setAssignedToID(initialData.assignedToID || []);
+            setAssignedTo(initialData.assignedTo || []);
         }
     }, [isOpen, initialData]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (projectTitle && assignedToID.length > 0) {
             onSubmit({
                 "title": projectTitle,
@@ -32,6 +35,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
             setDueDate('');
             setIsCompleted(false);
             setAssignedToID([]);
+            setAssignedTo([]);
             onClose();
         }
     };
@@ -86,24 +90,48 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                         />
                     </label>
 
-                    <label className="block mb-2">
-                        Assign Members:
-                        <select
-                            multiple
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                            value={assignedToID}
-                            onChange={(e) => {
-                                const selectedOptions = Array.from(e.target.selectedOptions);
-                                setAssignedToID(selectedOptions.map(option => option.value));
-                            }}
-                        >
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.displayName}
+                    <div>
+                        {/* Multiple select dropdown */}
+                        <label className="block mb-2">
+                            Assign Members:
+                            <select
+                                multiple
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={assignedToID} // Use the ID array as value for controlled component
+                                onChange={(e) => {
+                                    const selectedOptions = Array.from(e.target.selectedOptions);
+                                    setAssignedTo(selectedOptions.map(option => option.text));  // Set display names
+                                    setAssignedToID(selectedOptions.map(option => option.value));  // Set IDs
+                                }}
+                            >
+                                <option value="" disabled>
+                                    Add Members
                                 </option>
-                            ))}
-                        </select>
-                    </label>
+                                {users.map((user) => (
+                                    <option
+                                        key={user.id}
+                                        value={user.id}
+                                    >
+                                        {user.displayName}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        {/* Display Selected Users */}
+                        <div className="mt-4">
+                            <h3 className="text-lg font-semibold">Selected Members:</h3>
+                            {assignedTo.length > 0 ? (
+                                <ul className="list-disc pl-5">
+                                    {assignedTo.map((member, index) => (
+                                        <li key={index}>{member}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No members selected.</p>
+                            )}
+                        </div>
+                    </div>
 
                     <div className="flex justify-end">
                         <button

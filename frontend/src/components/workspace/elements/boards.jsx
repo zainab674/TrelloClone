@@ -4,14 +4,16 @@ import Board from './BoardCard';
 import { useAuth } from '../../../Authcontext';
 import { AllUsers, CreateProject, UserProjects } from '../../../api/allApis';
 import { useNavigate } from 'react-router-dom';
+import SuccessModal from '../../../constants/SuccessModal';
 
 const Boards = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { token } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
-    const { me, loading } = useAuth();
-
+    const { me, loading, fetchUserProfile } = useAuth();
+    const [successMessage, setSuccessMessage] = useState('');
     const [users, setUsers] = useState('');
+
     const navigate = useNavigate();
     const FetchAllUsers = async () => {
         try {
@@ -28,10 +30,13 @@ const Boards = () => {
         };
         try {
             const result = await CreateProject(data, token);
-            console.log("Project created:", result);
-            // Refresh the project list after creation
+            // console.log("Project created:", result);
+            setSuccessMessage('Project Created !');
+            fetchUserProfile()
+
         } catch (error) {
             console.error("Error creating project:", error);
+            setSuccessMessage('Error creating project: !');
         }
     };
     useEffect(() => {
@@ -70,7 +75,7 @@ const Boards = () => {
 
             <div className="mt-20">
                 <h2 className="text-xl font-semibold mb-4">Your Workspaces</h2>
-                <div className="flex items-center justify-between mb-6">
+                {/* <div className="flex items-center justify-between mb-6">
                     <div className="flex space-x-2">
                         <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
                             Boards
@@ -88,7 +93,7 @@ const Boards = () => {
                             Upgrade
                         </button>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Boards Grid */}
                 <div className="grid grid-cols-2 gap-4">
@@ -102,7 +107,7 @@ const Boards = () => {
                 </div>
             </div>
             <div className="mt-20">
-                <h2 className="text-xl font-semibold mb-4">Assigned projects</h2>
+                <h2 className="text-xl font-semibold mb-4">Shared projects</h2>
 
 
                 {/* Boards Grid */}
@@ -124,6 +129,12 @@ const Boards = () => {
                 onSubmit={handleProjectSubmit}
                 users={users}
             />
+            {successMessage && (
+                <SuccessModal
+                    message={successMessage}
+                    onClose={() => setSuccessMessage('')}
+                />
+            )}
         </div>
     );
 };

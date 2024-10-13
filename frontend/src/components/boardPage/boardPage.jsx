@@ -7,8 +7,10 @@ import { AllUsers, CreateTask, DeleteTask, GetTasks, ProjectDetail, ProjectMembe
 import { useAuth } from '../../Authcontext';
 import Nav from '../workspace/elements/nav';
 import TaskCard from './elements/taskCard';
-import TaskDetails from './elements/TaskDetails';
+import { TaskDetails } from './elements/TaskDetails';
 import ProjectHeader from './elements/ProjectHeader';
+import { LoadingSpinner } from '../../constants/loadingSpinner';
+import SuccessModal from '../../constants/SuccessModal';
 
 const BoardPage = () => {
     const [users, setUsers] = useState([]);
@@ -24,15 +26,10 @@ const BoardPage = () => {
     const [dueDate, setDueDate] = useState('');
     const [assignedTo, setAssignedTo] = useState([]);
     const [assignedToID, setAssignedToID] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [successMessage, setSuccessMessage] = useState('');
 
-    useEffect(() => {
-        if (me) {
-            Project()
 
-            FetchAllTasks();
-            Members();
-        }
-    }, [me]);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
 
@@ -107,12 +104,12 @@ const BoardPage = () => {
         try {
 
             await CreateTask(data, token);
-
+            setSuccessMessage('Task Added !');
             FetchAllTasks();
             closeModal();
         } catch (error) {
             console.error("Error adding task:", error);
-            alert("Failed to add task.");
+            setSuccessMessage('Failed to add task.');
         }
     };
 
@@ -120,9 +117,11 @@ const BoardPage = () => {
     const UpdateTaskk = async (taskId, updatedData) => {
         try {
             await UpdateTask(taskId, updatedData, token);
+            // setSuccessMessage('Task Updated !');
             FetchAllTasks();
         } catch (error) {
             console.error("Error updating task:", error);
+            setSuccessMessage('Error updating task:');
         }
     };
 
@@ -143,6 +142,7 @@ const BoardPage = () => {
 
         UpdateTaskk(currentTask.id, updatedTask);
         closeModal();
+        setSuccessMessage('Task Updated !');
     };
 
     const handleDrop = (task, newStatus) => {
@@ -153,9 +153,13 @@ const BoardPage = () => {
     const handleDeleteTask = async (taskId) => {
         try {
             await DeleteTask(taskId, token);
+            setSuccessMessage('Task Deleted');
+            setIsDetailModalOpen(false);
             FetchAllTasks();
         } catch (error) {
+            setIsDetailModalOpen(false);
             console.error("Error deleting task:", error);
+            setSuccessMessage("Error deleting task:");
         }
     };
 
@@ -193,10 +197,26 @@ const BoardPage = () => {
     };
 
 
+    useEffect(() => {
+        // Wait until the authentication state is loaded
+        if (token && me) {
+            setIsLoading(false);
+            Project()
+
+            FetchAllTasks();
+            Members();
+
+        }
+    }, [token, me]);
+
+    if (isLoading || !token || !me) {
+        return (
+            <LoadingSpinner />
+        );
+    }
 
 
-
-    const TaskColumn = ({ title, tasks, onDrop, openModal, openEditModal, handleDeleteTask }) => {
+    const TaskColumn = ({ title, tasks, onDrop, openModal, openEditModal, handleDeleteTask, me, project }) => {
         const [, drop] = useDrop({
             accept: 'task',
             drop: (item) => onDrop(item),
@@ -205,9 +225,10 @@ const BoardPage = () => {
         return (
             <div className="bg-gray-100 p-4 rounded-md shadow-lg" ref={drop}>
                 <h2 className="text-lg font-semibold mb-4">{title}</h2>
+                {console.log("hahahahhaha", project)}
                 {tasks.length > 0 ? (
                     tasks.map((task) => (
-                        <TaskCard key={task.id} task={task} openEditModal={openEditModal} handleDeleteTask={handleDeleteTask} users={users} openDetailsModal={openDetailsModal} />
+                        <TaskCard key={task.id} task={task} openEditModal={openEditModal} handleDeleteTask={handleDeleteTask} users={users} openDetailsModal={openDetailsModal} me={me} project={project} />
                     ))
                 ) : (
                     <p>No tasks available.</p>
@@ -241,6 +262,8 @@ const BoardPage = () => {
                             openModal={openModal}
                             openEditModal={openEditModal}
                             handleDeleteTask={handleDeleteTask}
+                            me={me}
+                            project={project}
                         />
                         <TaskColumn
                             title="In Progress"
@@ -248,6 +271,8 @@ const BoardPage = () => {
                             onDrop={(task) => handleDrop(task, 'inProgress')}
                             openEditModal={openEditModal}
                             handleDeleteTask={handleDeleteTask}
+                            me={me}
+                            project={project}
                         />
                         <TaskColumn
                             title="Completed"
@@ -255,6 +280,8 @@ const BoardPage = () => {
                             onDrop={(task) => handleDrop(task, 'completed')}
                             openEditModal={openEditModal}
                             handleDeleteTask={handleDeleteTask}
+                            me={me}
+                            project={project}
                         />
                     </div>
 
@@ -279,8 +306,8 @@ const BoardPage = () => {
                                         <input
                                             type="radio"
                                             value="1" // High priority
-                                            checked={priority === '1'}
-                                            onChange={(e) => setPriority(e.target.value)}
+                                            checked={priority === 1}
+                                            onChange={(e) => setPriority(Number(e.target.value))} // Convert to number
                                             className="mr-2"
                                         />
                                         <span>High</span>
@@ -290,8 +317,8 @@ const BoardPage = () => {
                                         <input
                                             type="radio"
                                             value="2" // Medium priority
-                                            checked={priority === '2'}
-                                            onChange={(e) => setPriority(e.target.value)}
+                                            checked={priority === 2}
+                                            onChange={(e) => setPriority(Number(e.target.value))} // Convert to number
                                             className="mr-2"
                                         />
                                         <span>Medium</span>
@@ -301,14 +328,14 @@ const BoardPage = () => {
                                         <input
                                             type="radio"
                                             value="3" // Low priority
-                                            checked={priority === '3'}
-                                            onChange={(e) => setPriority(e.target.value)}
+                                            checked={priority === 3}
+                                            onChange={(e) => setPriority(Number(e.target.value))} // Convert to number
                                             className="mr-2"
                                         />
                                         <span>Low</span>
                                     </label>
-
                                 </div>
+
                                 <input
                                     type="date"
                                     className="w-full p-2 border border-gray-300 rounded-md"
@@ -322,30 +349,73 @@ const BoardPage = () => {
                                     "no members in project "
                                     :
 
-                                    <select
-                                        multiple
-                                        className="w-full p-2 border border-gray-300 rounded-md"
-                                        value={assignedToID} // Keep this as assignedToID
-                                        onChange={(e) => {
-                                            const selectedOptions = Array.from(e.target.selectedOptions);
-                                            setAssignedTo(selectedOptions.map(option => option.value));  // Display names
-                                            setAssignedToID(selectedOptions.map(option => option.getAttribute('data-id')));  // IDs
-                                        }}
-                                    >
-                                        <option value="" disabled>
-                                            Assigned To
-                                        </option>
-                                        {users.map((user) => (
-                                            <option
-                                                key={user.id}
-                                                value={user.displayName}
-                                                data-id={user.id}
-                                                selected={assignedToID.includes(user.id)} // Set selected based on assignedToID
+                                    // <select
+                                    //     multiple
+                                    //     className="w-full p-2 border border-gray-300 rounded-md"
+                                    //     value={assignedToID} // Keep this as assignedToID
+                                    //     onChange={(e) => {
+                                    //         const selectedOptions = Array.from(e.target.selectedOptions);
+                                    //         setAssignedTo(selectedOptions.map(option => option.value));  // Display names
+                                    //         setAssignedToID(selectedOptions.map(option => option.getAttribute('data-id')));  // IDs
+                                    //     }}
+                                    // >
+                                    //     <option value="" disabled>
+                                    //         Assigned To
+                                    //     </option>
+                                    //     {users.map((user) => (
+                                    //         <option
+                                    //             key={user.id}
+                                    //             value={user.displayName}
+                                    //             data-id={user.id}
+                                    //             selected={assignedToID.includes(user.id)} // Set selected based on assignedToID
+                                    //         >
+                                    //             {user.displayName}
+                                    //         </option>
+                                    //     ))}
+                                    // </select>
+                                    <>
+                                        <label className="block mb-2">
+                                            Assign Members:
+                                            <select
+                                                multiple
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                value={assignedToID} // Use ID array for controlled component
+                                                onChange={(e) => {
+                                                    const selectedOptions = Array.from(e.target.selectedOptions);
+                                                    setAssignedTo(selectedOptions.map(option => option.value));  // Set display names
+                                                    setAssignedToID(selectedOptions.map(option => option.getAttribute('data-id')));  // Set IDs
+                                                }}
                                             >
-                                                {user.displayName}
-                                            </option>
-                                        ))}
-                                    </select>
+                                                <option value="" disabled>
+                                                    Assigned To
+                                                </option>
+                                                {users.map((user) => (
+                                                    <option
+                                                        key={user.id}
+                                                        value={user.displayName}  // Value is the display name
+                                                        data-id={user.id}         // Store the ID in data-id
+                                                        selected={assignedToID.includes(user.id)} // Set selected based on assignedToID
+                                                    >
+                                                        {user.displayName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </label>
+
+
+                                        <div className="mt-4">
+                                            <h3 className="text-lg font-semibold">Selected Members:</h3>
+                                            {assignedTo.length > 0 ? (
+                                                <ul className="list-disc pl-5">
+                                                    {assignedTo.map((member, index) => (
+                                                        <li key={index}>{member}</li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p>No members selected.</p>
+                                            )}
+                                        </div>
+                                    </>
 
                                 }
 
@@ -374,6 +444,14 @@ const BoardPage = () => {
                     />
                 )
             }
+
+
+            {successMessage && (
+                <SuccessModal
+                    message={successMessage}
+                    onClose={() => setSuccessMessage('')}
+                />
+            )}
 
         </>
     );
