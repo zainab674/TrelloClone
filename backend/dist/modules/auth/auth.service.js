@@ -23,13 +23,10 @@ let AuthService = class AuthService {
         this.userService = userService;
     }
     getUserFromToken(token) {
+        console.log(token);
         const decoded = this.jwtService.decode(token);
-        if (decoded) {
-            return decoded;
-        }
-        else {
-            throw new Error('Invalid token or missing id');
-        }
+        console.log(decoded);
+        return decoded;
     }
     async createAccessToken(user) {
         user.password = "";

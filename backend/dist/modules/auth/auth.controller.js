@@ -29,12 +29,14 @@ const TokenPayloadDto_1 = require("./dto/TokenPayloadDto");
 const user_signup_dto_1 = require("./dto/user.signup.dto");
 const tasks_service_1 = require("../tasks/tasks.service");
 const projects_service_1 = require("../projects/projects.service");
+const socket_service_1 = require("../socket/socket.service");
 let AuthController = class AuthController {
-    constructor(userService, authService, tasksService, projectService) {
+    constructor(userService, authService, tasksService, projectService, socketService) {
         this.userService = userService;
         this.authService = authService;
         this.tasksService = tasksService;
         this.projectService = projectService;
+        this.socketService = socketService;
     }
     async generateString(length) {
         let result = "";
@@ -54,17 +56,19 @@ let AuthController = class AuthController {
         return await this.userService.createUser(userRegisterDto);
     }
     async getCurrentUser(user) {
-        const [profileData, tasks, projects, sharedProjects] = await Promise.all([
+        const [profileData, tasks, projects, sharedProjects, notify] = await Promise.all([
             this.userService.getProfileData(user.id),
             this.tasksService.findByUserId(user.id),
             this.projectService.findByUserId(user.id),
             this.projectService.findByMemberId(user.id),
+            this.socketService.getAll(user.id),
         ]);
         return {
             profile: profileData,
             tasks: tasks,
             projects: projects,
             sharedProjects: sharedProjects,
+            notify: notify,
         };
     }
     async delete(user, pid) {
@@ -133,6 +137,7 @@ exports.AuthController = AuthController = __decorate([
     __metadata("design:paramtypes", [user_service_1.UserService,
         auth_service_1.AuthService,
         tasks_service_1.TasksService,
-        projects_service_1.ProjectsService])
+        projects_service_1.ProjectsService,
+        socket_service_1.SocketService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

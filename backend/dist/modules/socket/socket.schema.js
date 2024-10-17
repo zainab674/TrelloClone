@@ -19,15 +19,16 @@ let Socket = class Socket {
 };
 exports.Socket = Socket;
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }),
-    __metadata("design:type", String)
-], Socket.prototype, "recepientId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }),
-    __metadata("design:type", String)
-], Socket.prototype, "senderId", void 0);
+    (0, class_validator_1.IsOptional)(),
+    (0, swagger_1.ApiProperty)({
+        description: "Members ",
+        example: ["609c5a6a29a47b0015fb32bd", "609c5a6a29a47b0015fb32be"],
+    }),
+    (0, mongoose_1.Prop)({
+        type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'User' }]
+    }),
+    __metadata("design:type", Array)
+], Socket.prototype, "members", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
@@ -40,23 +41,6 @@ __decorate([
     (0, mongoose_1.Prop)({ type: "string" }),
     __metadata("design:type", String)
 ], Socket.prototype, "message", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: String, trim: true, required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(3),
-    (0, swagger_1.ApiProperty)({
-        description: 'Image URL or path for the chat message',
-        type: 'string',
-        format: 'binary',
-        required: false,
-    }),
-    (0, class_validator_jsonschema_1.JSONSchema)({
-        description: 'Image for Chat',
-        title: 'Image',
-    }),
-    __metadata("design:type", String)
-], Socket.prototype, "image", void 0);
 exports.Socket = Socket = __decorate([
     (0, mongoose_1.Schema)({
         toJSON: {

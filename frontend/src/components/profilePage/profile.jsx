@@ -57,7 +57,7 @@ const MeProfile = () => {
                         <li className="text-gray-500 hover:text-blue-600 cursor-pointer" onClick={() => { setPage('sharedProjects') }}>Shared Projects</li>
                         <li className="text-gray-500 hover:text-blue-600 cursor-pointer" onClick={() => { setPage('tasks') }}>Tasks</li>
 
-                        <li className="text-gray-500 hover:text-blue-600 cursor-pointer">Notifications</li>
+                        <li className="text-gray-500 hover:text-blue-600 cursor-pointer" onClick={() => { setPage('notify') }}>Notifications</li>
 
                     </ul>
                 </div>
@@ -258,6 +258,33 @@ const MeProfile = () => {
                             </div>
                         </>
                     }
+                    {console.log("Notifications:", me.notify)}
+                    {page === 'notify' && (
+                        <>
+                            <div className="space-y-6">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-lg font-bold">Notifications</h2>
+                                </div>
+
+                                <div className="p-4">
+                                    <h2 className="text-2xl font-bold mb-4">Tasks</h2>
+
+                                    {/* Map through the notify array to display each notification */}
+                                    {me.notify.map((notification) => (
+                                        <div key={notification.id} className="border p-4 rounded-lg mb-4 shadow-md">
+                                            {/* Display notification message */}
+                                            <p className="text-md font-semibold">{notification.message}</p>
+
+
+
+                                            {/* Display the creation time of the notification */}
+                                            <p className="text-xs text-gray-400">Received at: {new Date(notification.createdAt).toLocaleString()}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+                    )}
 
 
                 </div>

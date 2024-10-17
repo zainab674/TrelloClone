@@ -7,10 +7,12 @@ import { CaslModule } from "./casl/casl.module";
 import { ConfigurationModule } from "./configuration/configuration.module";
 import { ConfigurationService } from "./configuration/configuration.service";
 import { AuthModule } from "./modules/auth/auth.module";
-// import { PostsModule } from "./modules/posts/posts.module";
+
 import { TasksModule } from "./modules/tasks/tasks.module";
 import { ProjectsModule } from "./modules/projects/projects.module";
-// import { ProjectsModule } from './projects/projects.module';
+import { SocketModule } from "./modules/socket/socket.module";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from "path";
 
 
 @Module({
@@ -30,8 +32,11 @@ import { ProjectsModule } from "./modules/projects/projects.module";
     CaslModule,
 
     TasksModule,
-
+    SocketModule,
     ProjectsModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'), // Specify the directory
+    }),
 
   ],
   controllers: [AppController],

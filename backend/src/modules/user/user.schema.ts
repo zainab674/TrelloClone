@@ -73,11 +73,11 @@ export class User {
   password: string;
 
 
-
+  @IsOptional()
   @ApiProperty()
   @IsString()
   @IsOptional()
-  @MinLength(5)
+  // @MinLength(5)
   @JSONSchema({
     description: "Information about User",
     title: "About",

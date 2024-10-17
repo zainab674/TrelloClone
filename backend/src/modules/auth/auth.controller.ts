@@ -27,6 +27,7 @@ import { TokenPayloadDto } from "./dto/TokenPayloadDto";
 import { UserSignupDto } from "./dto/user.signup.dto";
 import { TasksService } from "../tasks/tasks.service";
 import { ProjectsService } from "../projects/projects.service";
+import { SocketService } from "../socket/socket.service";
 // import { PostsService } from "../posts/posts.service";
 // import { AssignedTasksService } from "../assigned-tasks/assigned-tasks.service";
 
@@ -39,6 +40,7 @@ export class AuthController {
     private authService: AuthService,
     private tasksService: TasksService,
     private projectService: ProjectsService,
+    private socketService: SocketService,
   ) { }
 
   async generateString(length) {
@@ -94,13 +96,13 @@ export class AuthController {
   @Auth(Action.Read, "User")
   @ApiOkResponse({ type: User, description: "current user info" })
   async getCurrentUser(@AuthUser() user: User) {
-    const [profileData, tasks, projects, sharedProjects] = await Promise.all([
+    const [profileData, tasks, projects, sharedProjects, notify] = await Promise.all([
       this.userService.getProfileData(user.id),
       this.tasksService.findByUserId(user.id),
       this.projectService.findByUserId(user.id),
       this.projectService.findByMemberId(user.id),
+      this.socketService.getAll(user.id),
 
-      // this.assignedServive.getReviews(user.id),
     ]);
 
     return {
@@ -108,43 +110,21 @@ export class AuthController {
       tasks: tasks,
       projects: projects,
       sharedProjects: sharedProjects,
+      notify: notify,
 
     };
   }
-  /////////////////////MY PROFILE
-  // @Delete(constTexts.authRoute.delete)
-  // @HttpCode(HttpStatus.OK)
-  // @Auth(Action.Read, "User")
-  // // @ApiOkResponse({ type: User, description: "Delete Project" })
-  // async delete(
-  //   @AuthUser() user: User,
-  //   @Param("id") pid: string
-  // ) {
-  //   try {
-  //     // Delete tasks associated with the project
-  //     await this.tasksService.deleteByProjectId(pid); // Pass the project ID to delete related tasks
-
-  //     // Delete the project itself
-  //     await this.projectService.deletePost(pid); // Pass user ID for authorization
-
-  //     return { message: 'Project and its tasks deleted successfully' }; // Success response
-  //   } catch (error) {
-  //     // Handle errors appropriately
-  //     throw new HttpException('Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
-  //   }
-  // }
-
 
 
   @Delete(constTexts.authRoute.delete)
   @HttpCode(HttpStatus.OK)
   @Auth(Action.Read, "User")
   async delete(
-    @AuthUser() user: User, // Authenticated user
-    @Param("id") pid: string // Project ID
+    @AuthUser() user: User,
+    @Param("id") pid: string
   ) {
     try {
-      // Fetch the project to check ownership
+
       const project = await this.projectService.findById(pid);
 
 
@@ -152,15 +132,15 @@ export class AuthController {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
 
-      // Delete tasks associated with the project
-      await this.tasksService.deleteByProjectId(pid); // Pass the project ID to delete related tasks
 
-      // Delete the project itself
-      await this.projectService.deletePost(pid); // Pass user ID for authorization
+      await this.tasksService.deleteByProjectId(pid);
 
-      return { message: 'Project and its tasks deleted successfully' }; // Success response
+
+      await this.projectService.deletePost(pid);
+
+      return { message: 'Project and its tasks deleted successfully' };
     } catch (error) {
-      // Handle errors appropriately
+
       throw new HttpException(error.message || 'Error deleting project', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

@@ -16,15 +16,16 @@ export class AuthService {
 
   getUserFromToken(token: string): any {
 
-
+    console.log(token);
     const decoded = this.jwtService.decode(token);
-    // console.log(decoded);
-    if (decoded) {
-      return decoded;
-    }
-    else {
-      throw new Error('Invalid token or missing id');
-    }
+    console.log(decoded);
+    return decoded;
+    // if (decoded) {
+    //   return decoded;
+    // }
+    // else {
+    //   throw new Error('Invalid token or missing id');
+    // }
   }
 
   async createAccessToken(user: User): Promise<TokenPayloadDto> {

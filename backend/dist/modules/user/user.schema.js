@@ -57,10 +57,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MinLength)(5),
     (0, class_validator_jsonschema_1.JSONSchema)({
         description: "Information about User",
         title: "About",

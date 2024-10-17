@@ -12,6 +12,7 @@ import {
   UnAuthorizedWrapper,
 } from './routes';
 import { useAuth } from './Authcontext';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const { token } = useAuth();
@@ -42,7 +43,10 @@ const App = () => {
 
 
 
-  return <Router>{renderRoutes()}</Router>;
+  return <Router>
+
+    {renderRoutes()}
+  </Router>;
 };
 
 

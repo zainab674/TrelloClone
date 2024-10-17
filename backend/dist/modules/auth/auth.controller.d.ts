@@ -31,12 +31,14 @@ import { TokenPayloadDto } from "./dto/TokenPayloadDto";
 import { UserSignupDto } from "./dto/user.signup.dto";
 import { TasksService } from "../tasks/tasks.service";
 import { ProjectsService } from "../projects/projects.service";
+import { SocketService } from "../socket/socket.service";
 export declare class AuthController {
     private userService;
     private authService;
     private tasksService;
     private projectService;
-    constructor(userService: UserService, authService: AuthService, tasksService: TasksService, projectService: ProjectsService);
+    private socketService;
+    constructor(userService: UserService, authService: AuthService, tasksService: TasksService, projectService: ProjectsService, socketService: SocketService);
     generateString(length: any): Promise<string>;
     userLogin(userLoginDto: UserLoginDto): Promise<TokenPayloadDto>;
     userRegister(userRegisterDto: UserSignupDto): Promise<UserSignupDto>;
@@ -47,6 +49,7 @@ export declare class AuthController {
         tasks: any;
         projects: any;
         sharedProjects: any;
+        notify: any;
     }>;
     delete(user: User, pid: string): Promise<{
         message: string;

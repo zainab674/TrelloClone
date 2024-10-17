@@ -5,12 +5,13 @@ import { useAuth } from '../../../Authcontext';
 import { AllUsers, CreateProject, UserProjects } from '../../../api/allApis';
 import { useNavigate } from 'react-router-dom';
 import SuccessModal from '../../../constants/SuccessModal';
+import { io } from 'socket.io-client';
 
 const Boards = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { token } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
-    const { me, loading, fetchUserProfile } = useAuth();
+    const { me, loading, fetchUserProfile, socket } = useAuth();
     const [successMessage, setSuccessMessage] = useState('');
     const [users, setUsers] = useState('');
 
@@ -30,8 +31,19 @@ const Boards = () => {
         };
         try {
             const result = await CreateProject(data, token);
-            // console.log("Project created:", result);
+
             setSuccessMessage('Project Created !');
+
+            const msg = `You have been assigned to a new project: ${projectTitle}`;
+
+
+            const member = assignedToID
+            const info = {
+                members: member,
+                message: msg
+            }
+            console.log(info)
+            socket.emit('notifyMembers', info);
             fetchUserProfile()
 
         } catch (error) {
@@ -75,25 +87,7 @@ const Boards = () => {
 
             <div className="mt-20">
                 <h2 className="text-xl font-semibold mb-4">Your Workspaces</h2>
-                {/* <div className="flex items-center justify-between mb-6">
-                    <div className="flex space-x-2">
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
-                            Boards
-                        </button>
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
-                            Views
-                        </button>
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
-                            Members (1)
-                        </button>
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
-                            Settings
-                        </button>
-                        <button className="bg-purple-700 hover:bg-purple-600 text-white p-2 rounded">
-                            Upgrade
-                        </button>
-                    </div>
-                </div> */}
+
 
                 {/* Boards Grid */}
                 <div className="grid grid-cols-2 gap-4">

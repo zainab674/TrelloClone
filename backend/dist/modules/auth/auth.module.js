@@ -18,6 +18,7 @@ const app_config_1 = require("./../../configuration/app.config");
 const axios_1 = require("@nestjs/axios");
 const tasks_module_1 = require("../tasks/tasks.module");
 const projects_module_1 = require("../projects/projects.module");
+const socket_module_1 = require("../socket/socket.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -34,7 +35,8 @@ exports.AuthModule = AuthModule = __decorate([
             }),
             axios_1.HttpModule,
             projects_module_1.ProjectsModule,
-            tasks_module_1.TasksModule
+            tasks_module_1.TasksModule,
+            socket_module_1.SocketModule
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],

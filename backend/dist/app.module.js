@@ -18,6 +18,9 @@ const configuration_service_1 = require("./configuration/configuration.service")
 const auth_module_1 = require("./modules/auth/auth.module");
 const tasks_module_1 = require("./modules/tasks/tasks.module");
 const projects_module_1 = require("./modules/projects/projects.module");
+const socket_module_1 = require("./modules/socket/socket.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,7 +40,11 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             casl_module_1.CaslModule,
             tasks_module_1.TasksModule,
+            socket_module_1.SocketModule,
             projects_module_1.ProjectsModule,
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
+            }),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

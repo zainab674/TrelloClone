@@ -9,6 +9,7 @@ import { AppConfig } from "./../../configuration/app.config";
 import { HttpModule } from "@nestjs/axios";
 import { TasksModule } from "../tasks/tasks.module";
 import { ProjectsModule } from "../projects/projects.module";
+import { SocketModule } from "../socket/socket.module";
 // import { TasksService } from "../tasks/tasks.service";
 // import { PostsModule } from "../posts/posts.module";
 // import { AssignedTasksModule } from "../assigned-tasks/assigned-tasks.module";
@@ -28,7 +29,8 @@ import { ProjectsModule } from "../projects/projects.module";
     // AssignedTasksModule,
     HttpModule,
     ProjectsModule,
-    TasksModule
+    TasksModule,
+    SocketModule
 
   ],
   controllers: [AuthController],

@@ -28,7 +28,7 @@ let SocketService = class SocketService {
     }
     async getAll(id) {
         const messages = await this.socketModel.find({
-            $or: [{ senderId: id }, { recepientId: id }]
+            members: { $in: [id] }
         }).exec();
         return messages;
     }

@@ -13,8 +13,8 @@ exports.MyGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const auth_service_1 = require("../auth/auth.service");
-const create_socket_dto_1 = require("./dto/create-socket.dto");
 const socket_service_1 = require("./socket.service");
+const create_socket_dto_1 = require("./dto/create-socket.dto");
 let MyGateway = class MyGateway {
     constructor(authService, socketService) {
         this.authService = authService;
@@ -23,14 +23,14 @@ let MyGateway = class MyGateway {
     }
     async getUserFromSocket(socket) {
         const token = socket.handshake.headers.authorization;
-        return this.authService.getUserFromToken(token);
+        return (this.authService.getUserFromToken(token) || "");
     }
     async handleConnection(socket) {
         const token = socket.handshake.headers.authorization;
         const user = await this.authService.getUserFromToken(token);
         if (user) {
             this.clients.set(user.userId, socket);
-            // console.log("Client connected: ", user.userId);
+            console.log("Client connected: ", user.userId);
             const messages = await this.socketService.getAll(user.userId);
             socket.emit('allMessages', messages);
         }
@@ -43,35 +43,41 @@ let MyGateway = class MyGateway {
         for (let [userId, clientSocket] of this.clients.entries()) {
             if (clientSocket.id === socket.id) {
                 this.clients.delete(userId);
-                // console.log("Client disconnected:", userId);
+                console.log("Client disconnected:", userId);
                 break;
             }
         }
     }
-    async handleSendMessage(socket, createSocketDto) {
-        const user = await this.getUserFromSocket(socket);
-        if (!user) {
-            socket.emit('error', { message: 'Unauthorized' });
-            return;
-        }
+    async notifyMembers(socket, createSocketDto) {
         if (typeof createSocketDto === 'string') {
             try {
                 createSocketDto = JSON.parse(createSocketDto);
             }
             catch (error) {
-                socket.emit('error', { message: 'Invalid data format' });
+                console.log("Error:", error);
                 return;
             }
         }
-        createSocketDto.senderId = user.userId;
-        // console.log(createSocketDto);
-        await this.socketService.create(createSocketDto);
-        const recipientSocket = this.clients.get(createSocketDto.recepientId);
-        if (recipientSocket) {
-            this.server.to(recipientSocket.id).emit('message', createSocketDto.message);
-        }
-        else {
-            // console.log("Recipient not connected");
+        console.log("Received data:", createSocketDto);
+        const { members = [], message = '' } = createSocketDto;
+        console.log("members:", members);
+        console.log("message:", message);
+        for (const memberId of members) {
+            console.log('Current Member ID:', memberId);
+            if (typeof memberId !== 'string') {
+                console.log('Error: Member ID is not a string:', memberId);
+                socket.emit('error', { message: 'Invalid member ID format' });
+                return;
+            }
+            await this.socketService.create(createSocketDto);
+            const recipientSocket = this.clients.get(memberId);
+            if (recipientSocket) {
+                this.server.to(recipientSocket.id).emit('notification', message);
+                console.log(`Notification sent to member ${memberId}`);
+            }
+            else {
+                console.log(`Member ${memberId} not connected`);
+            }
         }
     }
     async handleGetUserMessages(socket) {
@@ -90,11 +96,11 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], MyGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('sendMessage'),
+    (0, websockets_1.SubscribeMessage)('notifyMembers'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, create_socket_dto_1.CreateSocketDto]),
     __metadata("design:returntype", Promise)
-], MyGateway.prototype, "handleSendMessage", null);
+], MyGateway.prototype, "notifyMembers", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('getUserMessages'),
     __metadata("design:type", Function),
@@ -102,8 +108,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MyGateway.prototype, "handleGetUserMessages", null);
 exports.MyGateway = MyGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ port: 1234 }),
+    (0, websockets_1.WebSocketGateway)({
+        port: 1234,
+        cors: {
+            origin: 'http://localhost:5173',
+            methods: ['GET', 'POST'],
+            credentials: true,
+        },
+    }),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
-    socket_service_1.SocketService])
+        socket_service_1.SocketService])
 ], MyGateway);
 //# sourceMappingURL=gateway.js.map
