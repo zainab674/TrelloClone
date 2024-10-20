@@ -74,6 +74,7 @@ export class MyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         console.log("members:", members);
         console.log("message:", message);
 
+        await this.socketService.create(createSocketDto); // Handle async function properly
         for (const memberId of members) {
             console.log('Current Member ID:', memberId);
 
@@ -84,7 +85,6 @@ export class MyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 return;
             }
 
-            await this.socketService.create(createSocketDto); // Handle async function properly
             const recipientSocket = this.clients.get(memberId);
             if (recipientSocket) {
                 this.server.to(recipientSocket.id).emit('notification', message);

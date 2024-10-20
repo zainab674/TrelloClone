@@ -62,6 +62,7 @@ let MyGateway = class MyGateway {
         const { members = [], message = '' } = createSocketDto;
         console.log("members:", members);
         console.log("message:", message);
+        await this.socketService.create(createSocketDto);
         for (const memberId of members) {
             console.log('Current Member ID:', memberId);
             if (typeof memberId !== 'string') {
@@ -69,7 +70,6 @@ let MyGateway = class MyGateway {
                 socket.emit('error', { message: 'Invalid member ID format' });
                 return;
             }
-            await this.socketService.create(createSocketDto);
             const recipientSocket = this.clients.get(memberId);
             if (recipientSocket) {
                 this.server.to(recipientSocket.id).emit('notification', message);

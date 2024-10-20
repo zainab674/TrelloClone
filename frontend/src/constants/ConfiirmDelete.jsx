@@ -6,8 +6,8 @@ const ConfirmDelete = ({ handleDeletePost, handleCancelDelete }) => {
 
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 ">
-            <div className="bg-zinc-700 p-5 rounded shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 ">
+            <div className="bg-zinc-700 p-5 rounded shadow-lg w-1/3 flex flex-col justify-center items-center">
                 <h2 className=" text-white mb-4">Are you sure you want to delete ?</h2>
                 <div className="flex space-x-4">
                     <button

@@ -110,7 +110,7 @@ const Auth = () => {
                             />
                             <button
                                 onClick={handleLogin}
-                                className="bg-rose-500 text-white p-3 rounded-lg hover:bg-rose-600"
+                                className="bg-cyan-800 text-white p-3 rounded-lg hover:bg-rose-600"
                             >
                                 Login
                             </button>

@@ -198,7 +198,7 @@ export class ProjectsService {
         select: 'id displayName photoURL  ',  // Ensure you are selecting the `id` field
       })
       // .exec();
-      .select('title isCompleted members  ')  // Select fields to include
+      .select('title isCompleted members dueDate ')  // Select fields to include
       .exec();
 
     return projects;

@@ -27,10 +27,17 @@ let SocketService = class SocketService {
         return (result);
     }
     async getAll(id) {
-        const messages = await this.socketModel.find({
+        const messages = await this.socketModel
+            .find({
             members: { $in: [id] }
-        }).exec();
+        })
+            .sort({ createdAt: -1 })
+            .exec();
         return messages;
+    }
+    async delete(id) {
+        const message = await this.socketModel.findByIdAndDelete(id).exec();
+        return message;
     }
 };
 exports.SocketService = SocketService;

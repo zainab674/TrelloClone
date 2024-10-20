@@ -223,21 +223,41 @@ const BoardPage = () => {
         });
 
         return (
-            <div className="bg-gray-100 p-4 rounded-md shadow-lg" ref={drop}>
-                <h2 className="text-lg font-semibold mb-4">{title}</h2>
-                {console.log("hahahahhaha", project)}
-                {tasks.length > 0 ? (
-                    tasks.map((task) => (
-                        <TaskCard key={task.id} task={task} openEditModal={openEditModal} handleDeleteTask={handleDeleteTask} users={users} openDetailsModal={openDetailsModal} me={me} project={project} />
-                    ))
-                ) : (
-                    <p>No tasks available.</p>
-                )}
+            <div className=" p-4  rounded-md shadow-lg" ref={drop}>
+
+                <h2 className="text-lg font-semibold mb-1">{title}</h2>
+
+
+
                 {title === 'Tasks' && (
-                    <button className="mt-4 p-2 bg-green-500 text-white rounded" onClick={openModal}>
+                    <button className="mt-1 p-2 mb-2 bg-gray-700 hover:bg-gray-600 text-white rounded w-full" onClick={openModal}>
                         Add Task
                     </button>
                 )}
+
+                {console.log("Tasks in project:", tasks)}
+
+
+                {tasks.length > 0 ? (
+                    tasks
+                        .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)) // Sort tasks by dueDate in ascending order
+                        .map((task) => (
+                            <TaskCard
+                                key={task.id}
+                                task={task}
+                                openEditModal={openEditModal}
+                                handleDeleteTask={handleDeleteTask}
+                                users={users}
+                                openDetailsModal={openDetailsModal}
+                                me={me}
+                                project={project}
+                            />
+                        ))
+                ) : (
+                    <p>No tasks available.</p>
+                )}
+
+
             </div>
         );
     };
@@ -287,7 +307,7 @@ const BoardPage = () => {
 
                     {/* Add/Edit Task Modal */}
                     <Dialog open={isModalOpen} onClose={closeModal} className="fixed inset-0 z-10 flex items-center justify-center">
-                        <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-lg">
+                        <div className=" bg-white rounded-lg p-6 shadow-lg w-full max-w-lg">
                             <h2 className="text-xl font-semibold mb-4">
                                 {isEditMode ? 'Edit Task' : 'Add Task'}
                             </h2>
@@ -349,30 +369,7 @@ const BoardPage = () => {
                                     "no members in project "
                                     :
 
-                                    // <select
-                                    //     multiple
-                                    //     className="w-full p-2 border border-gray-300 rounded-md"
-                                    //     value={assignedToID} // Keep this as assignedToID
-                                    //     onChange={(e) => {
-                                    //         const selectedOptions = Array.from(e.target.selectedOptions);
-                                    //         setAssignedTo(selectedOptions.map(option => option.value));  // Display names
-                                    //         setAssignedToID(selectedOptions.map(option => option.getAttribute('data-id')));  // IDs
-                                    //     }}
-                                    // >
-                                    //     <option value="" disabled>
-                                    //         Assigned To
-                                    //     </option>
-                                    //     {users.map((user) => (
-                                    //         <option
-                                    //             key={user.id}
-                                    //             value={user.displayName}
-                                    //             data-id={user.id}
-                                    //             selected={assignedToID.includes(user.id)} // Set selected based on assignedToID
-                                    //         >
-                                    //             {user.displayName}
-                                    //         </option>
-                                    //     ))}
-                                    // </select>
+
                                     <>
                                         <label className="block mb-2">
                                             Assign Members:

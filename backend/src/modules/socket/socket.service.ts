@@ -30,15 +30,24 @@ export class SocketService {
 
 
 
+
+
   async getAll(id: string): Promise<any> {
-    // Find all documents where the given id is in the members array
-    const messages = await this.socketModel.find({
-      members: { $in: [id] } // Check if id exists in the members array
-    }).exec();
+    const messages = await this.socketModel
+      .find({
+        members: { $in: [id] }
+      })
+      .sort({ createdAt: -1 }) // Sort by 'createdAt' in descending order
+      .exec();
 
     return messages;
-
   }
+  async delete(id: string): Promise<any> {
+    const message = await this.socketModel.findByIdAndDelete(id).exec();
+    return message;
+  }
+
+
 
 
 

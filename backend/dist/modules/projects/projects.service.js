@@ -145,7 +145,7 @@ let ProjectsService = class ProjectsService {
             path: 'members',
             select: 'id displayName photoURL  ',
         })
-            .select('title isCompleted members  ')
+            .select('title isCompleted members dueDate ')
             .exec();
         return projects;
     }

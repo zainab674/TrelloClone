@@ -59,7 +59,7 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
     return (
         <div
             ref={drag}
-            className={`relative p-2 mb-2 bg-white rounded shadow-lg ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+            className={`relative p-2 mb-2 rounded shadow-lg bg-gray-300 ${isDragging ? 'opacity-50' : 'opacity-100'}`}
             onClick={(e) => {
                 e.stopPropagation();
                 openDetailsModal(task)
@@ -143,10 +143,11 @@ const TaskCard = ({ task, openDetailsModal, openEditModal, handleDeleteTask, use
                 }
 
             </div>
-
-            {/* Second row: Task name */}
-            <h3 className="font-bold mb-2">{task.taskName}</h3>
-
+            <div className="flex justify-between items-center mb-2">
+                {/* Second row: Task name */}
+                <h3 className="font-bold mb-2">{task.taskName}</h3>
+                <p>Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+            </div>
             {/* Third row: Assigned user photos */}
             <div className="flex space-x-1">
                 {assignedUserPhotos.map((photo, index) => (

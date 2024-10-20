@@ -30,4 +30,5 @@ export declare class SocketService {
     constructor(socketModel: Model<SocketDocument>);
     create(createSocketDto: CreateSocketDto): Promise<any>;
     getAll(id: string): Promise<any>;
+    delete(id: string): Promise<any>;
 }

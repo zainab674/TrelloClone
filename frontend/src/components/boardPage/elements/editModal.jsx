@@ -43,6 +43,9 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
     if (!isOpen) return null;
 
     return (
+
+
+
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div className="bg-white rounded-lg p-6 w-1/3">
                 <h2 className="text-lg font-semibold mb-4">Edit Project</h2>
@@ -55,6 +58,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                             onChange={(e) => setProjectTitle(e.target.value)}
                             className="mt-1 block w-full border border-gray-300 rounded p-2"
                             required
+                            readOnly={isCompleted}  // Make it read-only if isCompleted is true
                         />
                     </label>
 
@@ -65,6 +69,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                             onChange={(e) => setDescription(e.target.value)}
                             className="mt-1 block w-full border border-gray-300 rounded p-2"
                             required
+                            readOnly={isCompleted}  // Make it read-only if isCompleted is true
                         />
                     </label>
 
@@ -77,6 +82,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                             min={new Date().toISOString().split("T")[0]} // Prevent past dates
                             className="mt-1 block w-full border border-gray-300 rounded p-2"
                             required
+                            readOnly={isCompleted}  // Make it read-only if isCompleted is true
                         />
                     </label>
 
@@ -87,6 +93,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                             checked={isCompleted}
                             onChange={(e) => setIsCompleted(e.target.checked)}
                             className="ml-2"
+
                         />
                     </label>
 
@@ -103,6 +110,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                                     setAssignedTo(selectedOptions.map(option => option.text));  // Set display names
                                     setAssignedToID(selectedOptions.map(option => option.value));  // Set IDs
                                 }}
+                                disabled={isCompleted}  // Disable select if isCompleted is true
                             >
                                 <option value="" disabled>
                                     Add Members
@@ -143,7 +151,8 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                            className={`px-4 py-2 text-white rounded  bg-cyan-800 hover:bg-cyan-600`}
+
                         >
                             Save
                         </button>
@@ -151,6 +160,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, users, initialData }) => {
                 </form>
             </div>
         </div>
+
     );
 };
 

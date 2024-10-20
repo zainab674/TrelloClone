@@ -91,6 +91,31 @@ export const DeleteProject = async (id, token) => {
         console.error("Error in DeleteProject:", err); // Log the error
     }
 };
+export const DeleteNotifications = async (id, token) => {
+    try {
+        console.log("Authorization Token: ", token);
+
+        const response = await fetch(`http://localhost:1234/socket/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error deleting project:", errorData);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Deleted project:", data);
+        return data;
+
+    } catch (err) {
+        console.error("Error in DeleteProject:", err); // Log the error
+    }
+};
 
 
 

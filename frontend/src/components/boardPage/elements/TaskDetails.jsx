@@ -25,8 +25,12 @@ export const TaskDetails = ({ selectedTask, closeDetailsModal, users }) => {
                 <p>Priority: {priorityLabel}</p>
                 <p>Status: {selectedTask.status}</p>
                 <p>Due Date: {selectedTask.dueDate}</p>
-                <p>Assigned By: {selectedTask.assignedBy}</p>
+                {/* Display Assigned By */}
+                <p>Assigned By:
+                    {users.find(user => user.id === selectedTask.assignedBy)?.displayName || 'Unknown'}
+                </p>
 
+                {/* Display Assigned To */}
                 <div>
                     <h4>Assigned To:</h4>
                     <div className="flex space-x-2">
@@ -36,15 +40,16 @@ export const TaskDetails = ({ selectedTask, closeDetailsModal, users }) => {
                                 <div key={userId} className="flex items-center space-x-2">
                                     <img
                                         src={user?.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
-                                        alt={user?.displayName}
+                                        alt={user?.displayName || "Unknown"}
                                         className="w-8 h-8 rounded-full"
                                     />
-                                    <p>{user?.displayName}</p>
+                                    <p>{user?.displayName || "Unknown"}</p>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
+
             </div>
         </div>
     );

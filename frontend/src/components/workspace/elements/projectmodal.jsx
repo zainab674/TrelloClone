@@ -22,6 +22,7 @@ const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
             setAssignedTo('');
             onClose();
         }
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -92,7 +93,7 @@ const ProjectModal = ({ isOpen, onClose, onSubmit, users }) => {
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                            className="px-4 py-2 text-white bg-cyan-800 rounded hover:bg-cyan-600"
                         >
                             Submit
                         </button>

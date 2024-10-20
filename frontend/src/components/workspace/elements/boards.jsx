@@ -77,59 +77,68 @@ const Boards = () => {
 
 
     return (
-        <div className="p-6">
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-            >
-                Create Project
-            </button>
-
-            <div className="mt-20">
-                <h2 className="text-xl font-semibold mb-4">Your Workspaces</h2>
 
 
+        <>
+            <div className="flex mt-8 justify-between items-center">
+                <h2 className="text-2xl  mb-4 font-semibold">Your Workspaces</h2>
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-8 py-4 text-white bg-cyan-800 rounded hover:bg-cyan-600"
+                >
+                    Create Project
+                </button>
+            </div>
+
+            <div className="mt-8 mx-8">
                 {/* Boards Grid */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-wrap gap-4">
                     {me.projects && me.projects.length > 0 ? (
-                        me.projects.map((proj, index) => (
-                            <Board key={index} proj={proj} />
-                        ))
+                        me.projects
+                            .filter((proj) => !proj.isCompleted)
+                            .map((proj, index) => (
+                                <Board key={index} proj={proj} />
+                            ))
                     ) : (
-                        <p>No projects found.</p> // Display a message if no projects
+                        <p>No projects found.</p>
                     )}
                 </div>
-            </div>
-            <div className="mt-20">
-                <h2 className="text-xl font-semibold mb-4">Shared projects</h2>
 
-
-                {/* Boards Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                    {me.sharedProjects && me.sharedProjects.length > 0 ? (
-                        me.sharedProjects.map((proj, index) => (
-                            <Board key={index} proj={proj} />
-                        ))
-                    ) : (
-                        <p>No projects found.</p> // Display a message if no projects
-                    )}
+                {/* Shared Projects */}
+                <div className="mt-20">
+                    <h2 className="text-2xl font-semibold mb-4">Shared Projects</h2>
+                    <div className="flex flex-wrap gap-4">
+                        {me.sharedProjects && me.sharedProjects.length > 0 ? (
+                            me.sharedProjects
+                                .filter((proj) => !proj.isCompleted)
+                                .map((proj, index) => (
+                                    <Board key={index} proj={proj} />
+                                ))
+                        ) : (
+                            <p>No shared projects found.</p>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            {/* Project Modal */}
-            <ProjectModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleProjectSubmit}
-                users={users}
-            />
-            {successMessage && (
-                <SuccessModal
-                    message={successMessage}
-                    onClose={() => setSuccessMessage('')}
+                {/* Project Modal */}
+                <ProjectModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSubmit={handleProjectSubmit}
+                    users={users}
                 />
-            )}
-        </div>
+
+                {/* Success Modal */}
+                {successMessage && (
+                    <SuccessModal
+                        message={successMessage}
+                        onClose={() => setSuccessMessage('')}
+                    />
+                )}
+            </div>
+        </>
+
+
     );
 };
 
